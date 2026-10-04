@@ -436,6 +436,86 @@ body.ready #rail{opacity:1}
   .cue-line{animation:none}
 }
 
+/* RONDEL — tactile controls: machined chassis, smoked glass and vinyl. */
+.rd-control.rd-control{
+  --rd-size:58px;--rd-art:44px;--rdx:0;--rdy:0;--rd-glow:0;
+  position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:space-between;
+  gap:24px;min-height:var(--rd-size);padding:7px 7px 7px 24px;border-radius:999px;
+  border:1px solid #514940;color:var(--ink);text-align:left;white-space:nowrap;
+  background:radial-gradient(ellipse at 25% 0%,rgba(247,227,197,.17),transparent 66%),linear-gradient(180deg,#34312c 0%,#1c1a17 37%,#111110 70%,#1c1814 100%);
+  box-shadow:inset 0 1px 1px #ffffff30,inset 0 -2px 2px #000b,0 3px 0 #080706,0 4px 0 #4c3421,0 10px 20px #0009;
+  font:500 12px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  transition:border-color .35s,box-shadow .35s,filter .35s;
+  -webkit-tap-highlight-color:transparent;
+}
+.rd-control::before{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;z-index:-1;background:repeating-linear-gradient(0deg,#ffffff04 0 1px,transparent 1px 3px);opacity:.6}
+.rd-control::after{content:"";position:absolute;left:22px;right:calc(var(--rd-art) + 20px);bottom:7px;height:1px;background:linear-gradient(90deg,transparent,#d99a5540,transparent);pointer-events:none}
+.rd-control:hover,.rd-control:focus-visible{border-color:#a0805d;box-shadow:inset 0 1px 1px #ffffff40,inset 0 -2px 2px #000b,0 3px 0 #080706,0 4px 0 #725132,0 12px 26px #0009,0 0 24px #d99a5510}
+.rd-control:active,.rd-control.rd-fired{filter:brightness(1.13);box-shadow:inset 0 2px 8px #000a,0 1px 0 #6a482d,0 4px 12px #0008}
+.rd-copy{display:flex;flex-direction:column;align-items:flex-start;gap:5px;pointer-events:none;text-shadow:0 -1px 0 #000}
+.rd-copy .t,.rd-copy .lbl{font:inherit;letter-spacing:inherit;line-height:1.1}
+.rd-copy small{display:block;font:400 8px/1 var(--mono);letter-spacing:.13em;color:#b5a48d;transition:color .3s}
+.rd-control:hover .rd-copy small{color:#d99a55}
+.rd-control>.arrow,.rd-control>.eq,.rd-control>.dot{display:none}
+.rd-hardware{position:relative;flex:none;display:block;width:var(--rd-art);height:var(--rd-art);border-radius:50%;pointer-events:none;perspective:150px;transform:rotateX(calc(var(--rdy) * -9deg)) rotateY(calc(var(--rdx) * 9deg));transition:transform .2s ease-out}
+.rd-bezel{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 35deg,#312a24,#aa9f8b 16%,#27231e 30%,#050505 44%,#ab9c86 66%,#2b251f 80%,#312a24);box-shadow:0 1px 2px #000,inset 0 1px 1px #ffffff38}
+.rd-glass{position:absolute;inset:2px;border-radius:50%;overflow:hidden;background:radial-gradient(ellipse at 50% 105%,#9e7c4138,transparent 65%),#080807;box-shadow:inset 0 3px 7px #000,inset 0 -2px 4px #e8d7b73b}
+.rd-glass::after{content:"";position:absolute;inset:0;z-index:4;border-radius:50%;background:radial-gradient(ellipse at 32% 14%,#ffffff3b,transparent 46%),linear-gradient(130deg,transparent 35%,#f9e7c514 43%,transparent 51%);opacity:.65;transition:opacity .4s}
+.rd-control:hover .rd-glass::after{opacity:1}
+.rd-vinyl{position:absolute;inset:5px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 12%,#d7cbb64a 17%,transparent 23% 57%,#d7cbb642 64%,transparent 72%),repeating-radial-gradient(circle,#090908 0 1px,#302e29 1px 1.5px,#121211 1.5px 2.5px);box-shadow:0 2px 4px #000,inset 0 0 0 1px #ffffff16;animation:rd-spin 1.8s linear infinite;animation-play-state:paused}
+.rd-vinyl::before{content:"";position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,#1a130c 0 12%,#e5b27d 14% 27%,#8e5833 30% 56%,#d39458 59%);box-shadow:0 0 0 1px #d99a5524}
+.rd-vinyl::after{content:"";position:absolute;left:48%;top:47%;width:4%;height:5%;border-radius:50%;background:#efddba;box-shadow:0 1px 1px #000}
+.rd-arm{position:absolute;z-index:3;right:5px;top:5px;width:3px;height:24px;border-radius:2px;background:linear-gradient(90deg,#4d4a42,#f1dfbe 48%,#8a7c66);transform:rotate(8deg);transform-origin:50% 3px;box-shadow:1px 1px 1px #000;transition:transform .65s cubic-bezier(.2,.8,.2,1)}
+.rd-arm::before{content:"";position:absolute;left:-2px;top:0;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#b6a58b,#5a5144 60%,#28251f 70%);box-shadow:0 1px 2px #000}
+.rd-arm::after{content:"";position:absolute;left:-1px;bottom:-1px;width:5px;height:8px;border-radius:1px;background:linear-gradient(90deg,#887961,#d0b696 40%,#544938);box-shadow:0 1px 1px #000}
+.rd-led{position:absolute;z-index:5;left:4px;bottom:5px;width:3px;height:3px;border-radius:50%;background:#795035;box-shadow:0 0 0 1px #0008;transition:background .4s,box-shadow .4s}
+.rd-control:hover .rd-vinyl,.rd-control:focus-visible .rd-vinyl,.rd-control[aria-pressed="true"] .rd-vinyl,.rd-control.rd-fired .rd-vinyl{animation-play-state:running}
+.rd-control:hover .rd-arm,.rd-control:focus-visible .rd-arm,.rd-control[aria-pressed="true"] .rd-arm,.rd-control.rd-fired .rd-arm{transform:rotate(28deg)}
+.rd-control:hover .rd-led,.rd-control:focus-visible .rd-led,.rd-control[aria-pressed="true"] .rd-led,.rd-control.rd-fired .rd-led{background:#efb16a;box-shadow:0 0 5px 1px #d99a55a0}
+.rd-contact{position:absolute;inset:7px;z-index:6;border-radius:50%;border:1px solid #d99a55;opacity:0;pointer-events:none}
+.rd-fired .rd-contact{animation:rd-contact .8s ease-out}
+@keyframes rd-spin{to{transform:rotate(360deg)}}
+@keyframes rd-contact{0%{transform:scale(.55);opacity:.8}100%{transform:scale(1.7);opacity:0}}
+/* The envelope lifts out of a tiny record sleeve in the season-letter control. */
+.rd-mail .rd-vinyl{inset:4px;opacity:.5}
+.rd-letter{position:absolute;z-index:2;left:11px;top:13px;width:19px;height:14px;border-radius:1px;background:#c7b99d;box-shadow:0 1px 3px #000;transform:rotate(-8deg);transition:transform .6s var(--ease)}
+.rd-letter::before{content:"";position:absolute;left:4px;right:4px;top:4px;height:1px;background:#554939;box-shadow:0 3px 0 #554939,0 6px 0 #554939}
+.rd-sleeve{position:absolute;z-index:3;left:10px;top:20px;width:22px;height:15px;border-radius:1px;background:linear-gradient(125deg,#73604a,#322820);border:1px solid #bfa48566;box-shadow:0 2px 3px #000}
+.rd-sleeve::before,.rd-sleeve::after{content:"";position:absolute;bottom:1px;width:14px;height:1px;background:#c5ac863e;transform-origin:left}
+.rd-sleeve::before{left:0;transform:rotate(-32deg)}
+.rd-sleeve::after{right:0;transform-origin:right;transform:rotate(32deg)}
+.rd-control:hover .rd-letter,.rd-control:focus-visible .rd-letter{transform:translateY(-7px) rotate(-8deg)}
+.rd-mail.rd-fired .rd-letter{animation:rd-letter .9s var(--ease)}
+@keyframes rd-letter{0%{transform:translateY(-7px) rotate(-8deg)}35%{transform:translateY(-12px) rotate(5deg)}100%{transform:translateY(0) rotate(-8deg)}}
+.nav-r{gap:18px}
+.navcta.rd-control{--rd-size:44px;--rd-art:32px;gap:16px;padding:5px 5px 5px 18px;font-size:10px}
+.navcta .rd-vinyl{inset:4px}
+.navcta .rd-arm{height:17px;right:4px;top:4px;width:2px}
+.navcta .rd-arm::before{width:5px;height:5px;left:-1.5px}
+.navcta .rd-arm::after{width:4px;height:5px}
+.navcta .rd-led{left:3px;bottom:4px;width:2px;height:2px}
+.navplay.rd-control{--rd-size:38px;--rd-art:28px;padding:4px 4px 4px 12px;gap:10px;font-size:10px;border-color:#ffffff18;background:linear-gradient(#211f1b,#0e0d0b);box-shadow:inset 0 1px 0 #ffffff18,0 2px 6px #0009}
+.navplay .rd-arm{display:none}
+.navplay .rd-vinyl{inset:3px}
+.navplay .rd-led{width:2px;height:2px;left:4px;bottom:4px}
+.hero-sound.rd-control{position:absolute;min-width:230px}
+.film-sound.rd-control{position:absolute}
+.pill.rd-control[aria-pressed="true"],.rec-cta .rd-control.on,.rec-now-ctl .rd-control.hot{background:radial-gradient(ellipse at 25% 0%,rgba(247,227,197,.17),transparent 66%),linear-gradient(180deg,#34312c 0%,#1c1a17 37%,#111110 70%,#1c1814 100%);border-color:#ac8557;color:var(--ink)}
+.film-sound.rd-control{--rd-size:48px;--rd-art:34px;padding:6px 6px 6px 18px;font-size:10px;gap:18px}
+.film-sound .rd-arm{height:19px}
+.rec-now-ctl .rd-control{--rd-size:48px;--rd-art:34px;gap:14px;padding:6px 6px 6px 18px;font-size:10px}
+.rec-now-ctl .rd-arm{height:19px}
+.ft-btn.rd-control{min-width:230px;margin-top:22px}
+@media(max-width:760px){
+  .nav-r{gap:10px}.navcta.rd-control{--rd-size:40px;--rd-art:28px;gap:10px;padding:5px 5px 5px 12px;font-size:9px}
+  .navplay.rd-control{--rd-size:34px;--rd-art:24px;gap:7px;padding:4px 4px 4px 9px;font-size:9px}
+  .rd-control.rd-control{--rd-size:54px;--rd-art:40px;font-size:11px;gap:20px;padding-left:20px}
+  .hero-sound.rd-control{min-width:214px}.rd-copy small{font-size:7px}
+  .rec-now-ctl .rd-control{flex:1;justify-content:space-between;padding:6px 6px 6px 12px;gap:10px;font-size:9px;letter-spacing:.02em}
+  .rd-mail .rd-letter{left:9px;top:11px}.rd-mail .rd-sleeve{left:8px;top:18px}
+}
+@media(prefers-reduced-motion:reduce){.rd-hardware{transform:none}.rd-vinyl,.rd-contact,.rd-letter{animation:none!important}.rd-control,.rd-hardware,.rd-arm,.rd-letter{transition:none}}
+
 </style>
 </head>
 <body>
@@ -467,8 +547,8 @@ body.ready #rail{opacity:1}
     <a class="mt" href="#foot">Contact</a>
   </nav>
   <div class="nav-r">
-    <button id="navPlay" class="navplay" type="button" aria-pressed="false" aria-label="Play the record" data-cursor="Play"><span class="dot"></span><span class="lbl">Listen</span></button>
-    <a class="navcta" href="#foot" data-cursor="Reserve">Reserve one</a>
+    <button id="navPlay" class="navplay rd-control" type="button" aria-pressed="false" aria-label="Play the record" data-cursor="Play"><span class="rd-copy"><span class="lbl">Listen</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+    <a class="navcta rd-control" href="#foot" data-cursor="Reserve"><span class="rd-copy"><span class="t">Reserve one</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></a>
   </div>
   <div class="mega" id="mega" role="region" aria-label="Menu">
     <div class="mpanel" data-menu="object">
@@ -518,7 +598,7 @@ body.ready #rail{opacity:1}
 <!-- 01 · HERO: nav, the wordmark (behind the deck, in #under), the deck. Nothing else. ----------------------------- -->
 <section class="ch" id="hero" data-len="220" data-act="1">
   <div class="stage">
-    <button id="heroSound" class="pill ghost magnetic hero-sound" type="button" aria-pressed="false" data-cursor="Sound"><span class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span class="t">Turn sound on</span></button>
+    <button id="heroSound" class="pill ghost magnetic hero-sound rd-control" type="button" aria-pressed="false" data-cursor="Sound"><span class="rd-copy"><span class="t">Turn sound on</span><small>Analog, always</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
     <h1 class="sr-only">Rondel One, the walnut turntable</h1>
   </div>
 </section>
@@ -544,7 +624,7 @@ body.ready #rail{opacity:1}
       <p class="body film-p"><span class="l nowrap" style="--i:2"><span>Walnut, aluminium, steel. Nothing on it</span></span><span class="l nowrap" style="--i:3"><span>that does not touch the sound.</span></span></p>
     </div>
     <p class="k film-cap" id="filmCap" aria-hidden="true"><span class="l"><span><b id="filmCapNum">01</b><span id="filmCapTxt">The whole object</span><span class="x" id="filmCapX"></span></span></span></p>
-    <button id="filmSound" class="pill ghost magnetic film-sound" type="button" aria-pressed="false" aria-label="Turn the sound on" data-cursor="Sound"><span class="dot"></span><span class="t">Sound off</span></button>
+    <button id="filmSound" class="pill ghost magnetic film-sound rd-control" type="button" aria-pressed="false" aria-label="Turn the sound on" data-cursor="Sound"><span class="rd-copy"><span class="t">Sound off</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
   </div>
 </section>
 
@@ -587,7 +667,7 @@ body.ready #rail{opacity:1}
       <button class="rec-arrow magnetic" id="recNext" type="button" aria-label="Next record" data-cursor="Next">→</button>
     </div>
     <div class="rec-cta">
-      <button id="recPut" class="pill magnetic" type="button" data-cursor="Play"><span class="t">Put it on</span><span class="arrow">↓</span></button>
+      <button id="recPut" class="pill magnetic rd-control" type="button" data-cursor="Play"><span class="rd-copy"><span class="t">Put it on</span><small>Drop the needle</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
       <p class="k dim rec-hint" id="recHint">Scroll to browse the series</p>
     </div>
     <div class="rec-now" id="recNow" aria-live="polite">
@@ -597,8 +677,8 @@ body.ready #rail{opacity:1}
         <p class="body rec-now-artist" id="recNowArtist">The Jura Quartet</p>
       </div>
       <div class="rec-now-ctl">
-        <button id="recNowPlay" class="pill ghost magnetic" type="button" data-cursor="Stop"><span class="t">Stop</span></button>
-        <button id="recBack" class="pill magnetic" type="button" data-cursor="Back"><span class="arrow">←</span><span class="t">Back to the row</span></button>
+        <button id="recNowPlay" class="pill ghost magnetic rd-control" type="button" data-cursor="Stop"><span class="rd-copy"><span class="t">Stop</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+        <button id="recBack" class="pill magnetic rd-control" type="button" data-cursor="Back"><span class="rd-copy"><span class="t">Back to the row</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
       </div>
     </div>
   </div>
@@ -652,7 +732,7 @@ body.ready #rail{opacity:1}
       <p class="ft-promise">Every deck ships within 24 business hours.<br>Ten-year plinth warranty<br>30-day returns</p>
       <p class="ft-news-h">Get the season letter from Rondel.</p>
       <p class="ft-news-p">Four letters a year: first call on each batch, new pressings, finishes, workshop notes and listening-room dates, delivered to your inbox.</p>
-      <button class="ft-btn magnetic" type="button" data-cursor="Sign up">Sign up</button>
+      <button class="ft-btn magnetic rd-control rd-mail" type="button" data-cursor="Sign up"><span class="rd-copy"><span class="t">Sign up</span><small>The season letter</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-letter"></span><span class="rd-sleeve"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
     </div>
     <nav class="ft-col" aria-label="Service"><p class="ft-h">Service</p><a href="#">Help Center</a><a href="#">Setup guide</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Warranty</a><a href="#">Listening rooms</a></nav>
     <nav class="ft-col" aria-label="Company"><p class="ft-h">Company</p><a href="#">About</a><a href="#">Workshop</a><a href="#">Press</a><a href="#">Image bank</a></nav>
@@ -5037,6 +5117,33 @@ function createFlexCarousel(container, list, s) {
 const el = document.getElementById('rangeFc');
 window.__range = el ? createFlexCarousel(el, ITEMS, SETTINGS) : null;
 
+</script>
+<script>
+// Pointer light and a brief tactile pulse; original button actions stay in place.
+(() => {
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.rd-control').forEach(el => {
+    let release;
+    if (!reducedMotion) {
+      el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--rdx', ((e.clientX - r.left) / r.width - .5).toFixed(2));
+        el.style.setProperty('--rdy', ((e.clientY - r.top) / r.height - .5).toFixed(2));
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--rdx', '0'); el.style.setProperty('--rdy', '0');
+      });
+    }
+    el.addEventListener('click', () => {
+      clearTimeout(release);
+      el.classList.remove('rd-fired');
+      requestAnimationFrame(() => {
+        el.classList.add('rd-fired');
+        release = setTimeout(() => el.classList.remove('rd-fired'), 900);
+      });
+    });
+  });
+})();
 </script>
 </body>
 </html>
