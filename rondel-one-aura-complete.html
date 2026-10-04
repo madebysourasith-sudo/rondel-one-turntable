@@ -1315,7 +1315,7 @@ const wrapIdx = i => ((i % N_REC) + N_REC) % N_REC;
 const browseStep = p => { const u = clamp(p / REC_P.browse, 0, 1) * REC_TARGET, f = Math.floor(u), fr = u - f; return f + easeInOut(clamp((fr - 0.3) / 0.4, 0, 1)); };
 const dropLocked = () => car.dropI >= 0;
 function carStep(d) { if (dropLocked()) return; car.bias += d; if (reduced) car.biasCur = car.bias; }
-function carGo(i) {                                          // the mega menu: scroll to where record i rests (no bias)
+function carGo(i) {                                          // Scroll to where record i rests (no bias)
   car.bias = car.biasCur = 0;
   scrollToP(byId.records, REC_P.browse * Math.min(i, REC_TARGET) / REC_TARGET);
 }
@@ -1393,7 +1393,7 @@ function scrollToSection(t, frac) {
 for (const a of $$('a[href^="#"]')) a.addEventListener('click', e => {
   const h = a.getAttribute('href'); if (h === '#') { e.preventDefault(); return; }
   const t = document.querySelector(h); if (!t) return;
-  e.preventDefault(); scrollToSection(t);
+  e.preventDefault(); scrollToSection(t, h === "#hero" ? 0 : undefined);
 });
 
 // Scroll destinations shared by the pressing carousel and deck controls.
