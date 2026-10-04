@@ -1198,7 +1198,7 @@ const ART = {
     const d = x.createLinearGradient(0, 0, S * 0.6, S * 0.6); d.addColorStop(0, 'rgba(6,2,20,0.55)'); d.addColorStop(1, 'rgba(6,2,20,0)'); x.fillStyle = d; x.fillRect(0, 0, S, S);
   }
 };
-const LABEL_ART = { label_a: 'assets/asset-01.jpg', label_b: 'assets/asset-02.jpg', label_c: 'assets/asset-03.jpg', label_d: 'assets/asset-04.jpg', label_e: 'assets/asset-05.jpg', label_f: 'assets/asset-06.jpg', label_wood: 'assets/asset-07.jpg' };
+const LABEL_ART = { label_a: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-01.jpg', label_b: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-02.jpg', label_c: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-03.jpg', label_d: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-04.jpg', label_e: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-05.jpg', label_f: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-06.jpg', label_wood: 'https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-07.jpg' };
 const RECORDS = [
   { cat: 'RP-01', title: 'Sideboard Music', artist: 'The Jura Quartet', year: 2026, side: '19:40', art: 'label_e', bg: '#1a1410', ink: '#f3ece1', dark: true, music: { bpm: 74 } },
   { cat: 'RP-02', title: 'Thirty-Three and a Third', artist: 'Noor Haddad', year: 2026, side: '21:12', art: 'label_b', bg: '#e9dfc9', ink: '#17120e', music: { bpm: 66, transpose: -3, swing: 0.07, chords: CHORDS.dorian, melody: MELODY.low, epCut: 3200, tremRate: 3.4, rev: 0.42, dly: 0.35, kit: 0.55 } },
@@ -1274,7 +1274,7 @@ function drawLabel(rec, art, S) {
   x.restore();
   return c;
 }
-const loadArt = src => new Promise(res => { if (!src || src.length < 64) return res(null); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+const loadArt = src => new Promise(res => { if (!src || src.length < 64) return res(null); const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
 async function buildLabels() {
   const fonts = Promise.all(['400 40px Conthic', '400 40px Anton', '500 20px "DM Mono"', '500 20px "Instrument Sans"'].map(f => document.fonts.load(f).catch(() => null)));
   const arts = {};
@@ -1641,23 +1641,23 @@ import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
 /*  relief / roughness rebuilt at full resolution: showcase/make_textures5.py) */
 /* ------------------------------------------------------------------ */
 const WOOD_SRC = {
-  map: "assets/asset-08.jpg",
-  normal: "assets/asset-09.jpg",
-  rough: "assets/asset-10.jpg",
-  sideMap: "assets/asset-11.jpg",              // the plinth's end faces (detail pass 2: rebuilt from a veneer scan at 73 px/cm, grain vertical, toned to the photo's right face)
-  sideNormal: "assets/asset-12.jpg",
-  sideRough: "assets/asset-13.jpg"
+  map: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-08.jpg",
+  normal: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-09.jpg",
+  rough: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-10.jpg",
+  sideMap: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-11.jpg",              // the plinth's end faces (detail pass 2: rebuilt from a veneer scan at 73 px/cm, grain vertical, toned to the photo's right face)
+  sideNormal: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-12.jpg",
+  sideRough: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-13.jpg"
 };
 // detail pass (detail/work/make_detail_textures.py): the printed label scan + its paper relief.
 // Detail pass 2 (detail2/work/make_detail2_textures.py): a tileable fine-grain layer cut from a walnut veneer scan -
 // open pores, micro grain lines and fibre tooth under 0.4 mm - as a colour multiplier, relief and roughness, laid
 // over every plinth face at close range (it mip-averages to neutral at the hero distance)
 const DETAIL_SRC = {
-  labelMap: "assets/asset-14.jpg",
-  labelBump: "assets/asset-15.jpg",
-  woodDetailColor: "assets/asset-16.jpg",
-  woodDetailNormal: "assets/asset-17.jpg",
-  woodDetailRough: "assets/asset-18.jpg"
+  labelMap: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-14.jpg",
+  labelBump: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-15.jpg",
+  woodDetailColor: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-16.jpg",
+  woodDetailNormal: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-17.jpg",
+  woodDetailRough: "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-18.jpg"
 };
 
 /* ------------------------------------------------------------------ */
@@ -4526,7 +4526,7 @@ start().catch(err => { console.error(err); if (SITE.onError) SITE.onError(err); 
    click on the centred card zooms it (focus). Vertical wheel always belongs to the page. Images: Aura (GPT Image 2.5). */
 import { Renderer, Program, Mesh, Triangle, Plane, Texture, RenderTarget } from 'https://cdn.jsdelivr.net/npm/ogl@1.0.11/src/index.js';
 
-const RANGE_SRC = {"one": "assets/asset-19.jpg", "mini": "assets/asset-20.jpg", "studio": "assets/asset-21.jpg", "float": "assets/asset-22.jpg", "reference": "assets/asset-23.jpg", "field": "assets/asset-24.jpg"};
+const RANGE_SRC = {"one": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-19.jpg", "mini": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-20.jpg", "studio": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-21.jpg", "float": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-22.jpg", "reference": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-23.jpg", "field": "https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-24.jpg"};
 const ITEMS = [
   { key: 'one', title: 'Rondel One', subtitle: 'Black walnut · belt drive · €1,490', alt: 'Rondel One: a walnut belt-drive turntable' },
   { key: 'mini', title: 'Rondel Mini', subtitle: 'Soaped oak · compact · €690', alt: 'Rondel Mini: a compact pale oak turntable' },
@@ -4735,6 +4735,7 @@ function createFlexCarousel(container, list, s) {
     const texture = new Texture(gl, { generateMipmaps: true, minFilter: gl.LINEAR_MIPMAP_LINEAR, magFilter: gl.LINEAR, anisotropy });
     const slot = { item, index, texture, aspect: 0.75, loaded: false, failed: false, ready: 0, color: [0.05, 0.05, 0.05], image: [3, 4] };
     const image = new Image();
+    image.crossOrigin = 'anonymous';
     image.decoding = 'async';
     image.onload = () => {
       texture.image = image; texture.update();
