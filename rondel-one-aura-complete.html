@@ -87,60 +87,30 @@ body.cursor-on,body.cursor-on *{cursor:none!important}
 /* a black-to-transparent band between the page and the nav: content sliding out fades before it reaches the links
    (off in the hero, where nothing can reach the band) */
 #scrim{position:fixed;z-index:19;left:0;right:0;top:0;height:92px;pointer-events:none;opacity:var(--scrim,0);background:linear-gradient(to bottom,#000 0,#000 64%,rgba(0,0,0,.55) 82%,rgba(0,0,0,0) 100%)}
-/* nav, after Resend's: wordmark left, a centred row of menu triggers (chevrons) that open one shared rounded panel
-   (a link list + a featured card, panels slide in from the side you came from), a plain link, then Listen and a CTA */
-#nav{position:fixed;z-index:20;top:0;left:0;right:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:16px var(--gx);pointer-events:none;color:var(--ink);opacity:0;transform:translateY(-6px);transition:opacity .9s .2s,transform .9s .2s}
+/* A quiet navigation bar with direct links and a groove-inspired brand mark. */
+#nav{position:fixed;z-index:20;top:0;left:0;right:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px var(--gx);pointer-events:none;color:var(--ink);opacity:0;transform:translateY(-6px);transition:opacity .9s .2s,transform .9s .2s}
 body.ready #nav{opacity:1;transform:none}
 #nav>*{pointer-events:auto}
-#nav .wordmark{justify-self:start;font-family:var(--display);font-size:22px;letter-spacing:.07em;line-height:1}
-.menu{display:flex;align-items:center;gap:2px}
-.mt{position:relative;display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;font:500 15px/1 var(--sans);letter-spacing:.005em;color:var(--ink-2);transition:color .25s,background .25s}
-.mt svg{width:9px;height:9px;opacity:.7;transition:transform .35s var(--ease),opacity .25s}
-.mt:hover,.mt[aria-expanded="true"]{color:var(--ink)}
-.mt[aria-expanded="true"] svg{transform:rotate(180deg);opacity:1}
-.mt.on{color:var(--ink)}
-.mt.on::after{content:"";position:absolute;left:50%;bottom:1px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--amber)}
-.nav-r{justify-self:end;display:flex;align-items:center;gap:26px}
-.navplay{display:inline-flex;align-items:center;gap:9px;font:500 15px/1 var(--sans);color:var(--ink-2);transition:color .25s}
-.navplay:hover{color:var(--ink)}
-.navplay .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-3);transition:opacity .3s,background .3s,box-shadow .3s}
-.navplay[aria-pressed="true"]{color:var(--ink)}
-.navplay[aria-pressed="true"] .dot{background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 1.4s ease-in-out infinite}
+#nav .wordmark{justify-self:start;display:inline-flex;align-items:center;gap:12px;color:var(--ink)}
+.brand-mark{width:34px;height:34px;flex:none}
+.brand-name{font:600 17px/1 var(--sans);letter-spacing:.22em}
+.menu{display:flex;align-items:center;gap:26px}
+.mt{position:relative;display:inline-flex;align-items:center;padding:13px 0;font:400 13px/1 var(--sans);letter-spacing:.025em;color:var(--ink-2);transition:color .2s}
+.mt::after{content:"";position:absolute;left:0;right:0;bottom:5px;height:1px;background:currentColor;opacity:0;transition:opacity .2s}
+.mt:hover,.mt.on{color:var(--ink)}
+.mt:hover::after{opacity:.55}
+.mt.on::after{opacity:.3}
+#nav a:focus-visible,#nav button:focus-visible{outline:1px solid var(--amber);outline-offset:5px}
+body.cursor-on #nav,body.cursor-on #nav *{cursor:auto!important}
+body.cursor-on #nav a,body.cursor-on #nav a *,body.cursor-on #nav button,body.cursor-on #nav button *{cursor:pointer!important}
+body:has(#nav:hover) #cursor{opacity:0}
+.nav-r{justify-self:end;display:flex;align-items:center;gap:22px}
+.navplay{display:inline-flex;align-items:center;gap:8px;padding:12px 0;min-width:60px;background:none;border:0;border-radius:0;box-shadow:none;font:400 13px/1 var(--sans);letter-spacing:.025em;color:var(--ink-2);transition:color .2s}
+.navplay:hover,.navplay[aria-pressed="true"]{color:var(--ink)}
+.navplay .dot{width:5px;height:5px;border-radius:50%;background:var(--ink-3);transition:background .2s}
+.navplay[aria-pressed="true"] .dot{background:var(--amber)}
 .navcta{display:inline-flex;align-items:center;padding:12px 20px;border-radius:14px;font:600 15px/1 var(--sans);color:var(--ink);background:rgba(243,236,225,.07);border:1px solid rgba(243,236,225,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 20px rgba(0,0,0,.35);transition:background .25s,border-color .25s}
 .navcta:hover{background:rgba(243,236,225,.13);border-color:rgba(243,236,225,.28)}
-.mega{position:absolute;top:calc(100% - 4px);left:50%;width:min(780px,calc(100vw - 2 * var(--gx)));height:268px;border-radius:22px;border:1px solid rgba(243,236,225,.1);background:rgba(11,10,9,.84);-webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);box-shadow:0 40px 90px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden;opacity:0;visibility:hidden;transform:translate(-50%,10px) scale(.985);transform-origin:50% 0;transition:opacity .22s,transform .4s var(--ease),visibility 0s .4s}
-.mega.open{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .25s,transform .45s var(--ease),visibility 0s}
-.mpanel{position:absolute;inset:0;padding:14px;display:grid;grid-template-columns:1.18fr 1fr;gap:14px;opacity:0;transform:translate3d(calc(var(--dx,0) * 28px),0,0);transition:opacity .28s,transform .5s var(--ease);pointer-events:none}
-.mpanel.on{opacity:1;transform:none;pointer-events:auto}
-.mpanel.snap{transition:none}
-.mlist{display:flex;flex-direction:column;gap:1px;padding:8px 2px}
-.mlist button,.mlist a{display:flex;align-items:baseline;justify-content:space-between;gap:12px;text-align:left;padding:9px 14px;border-radius:12px;font:400 18px/1.15 var(--sans);color:var(--ink-2);white-space:nowrap;transition:color .2s,background .2s}
-.mlist button:hover,.mlist a:hover,.mlist button:focus-visible{color:var(--ink);background:rgba(243,236,225,.05)}
-.mlist small{font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-.mcard{position:relative;display:block;text-align:left;border-radius:15px;overflow:hidden;background:radial-gradient(120% 90% at 70% 100%,#1d1712 0%,#100e0c 55%,#0b0a09 100%);border:1px solid rgba(243,236,225,.08);padding:16px 18px;color:var(--ink)}
-.mcard .kick{display:block;font:400 13px/1 var(--sans);color:var(--ink-3)}
-.mcard .ttl{display:block;margin-top:8px;font:500 16px/1.25 var(--sans);color:var(--ink);max-width:26ch}
-.mcard .art{position:absolute;left:0;right:0;bottom:0;top:70px;pointer-events:none}
-.mcard:hover{border-color:rgba(243,236,225,.16)}
-/* card art: a spinning pressing / a deck from above / three finishes / a level meter */
-.disc{position:absolute;width:156px;height:156px;right:-22px;bottom:-46px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#0d0d0f 0 1.6px,#18181b 1.6px 2.4px);box-shadow:0 20px 40px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05);animation:spin 1.8s linear infinite}
-.disc::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 10%,rgba(255,255,255,.09) 14%,transparent 20% 60%,rgba(255,255,255,.07) 64%,transparent 70%)}
-.disc canvas,.disc i{position:absolute;left:33%;top:33%;width:34%;height:34%;border-radius:50%;background:var(--amber)}
-.disc i::after{content:"";position:absolute;left:44%;top:44%;width:12%;height:12%;border-radius:50%;background:#050505}
-@keyframes spin{to{transform:rotate(360deg)}}
-.deckart{position:absolute;left:18px;right:18px;bottom:16px;height:124px;border-radius:9px;background:linear-gradient(100deg,#5a3418,#7a4a24 30%,#4d2c14 55%,#6e4220 80%,#4a2a13);box-shadow:0 18px 36px rgba(0,0,0,.6),inset 0 0 0 5px rgba(0,0,0,.18)}
-.deckart::before{content:"";position:absolute;inset:6px;border-radius:5px;background:#1d1b19}
-.deckart .disc{width:110px;height:110px;left:16px;top:7px;right:auto;bottom:auto;animation-duration:1.8s}
-.deckart b{position:absolute;right:30px;top:18px;width:6px;height:96px;border-radius:3px;background:linear-gradient(#d8d4cc,#8e8a84);transform-origin:50% 0;transform:rotate(24deg)}
-.deckart b::before{content:"";position:absolute;left:-6px;top:-10px;width:18px;height:18px;border-radius:50%;background:#b9b4ab}
-.swatches{position:absolute;left:18px;right:18px;bottom:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;height:76px}
-.swatches span{border-radius:9px;display:flex;align-items:flex-end;padding:10px;font:500 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-.swatches .w{background:repeating-linear-gradient(92deg,#6a3d1e 0 3px,#7d4a25 3px 7px,#5b331a 7px 9px);color:#f3ece1}
-.swatches .i{background:linear-gradient(160deg,#2a2826,#0c0c0c 60%,#1b1a19);color:#f3ece1}
-.swatches .o{background:repeating-linear-gradient(88deg,#ddd3c3 0 4px,#e8dfd0 4px 9px,#d2c6b3 9px 11px);color:#2a2219}
-.bigeq{position:absolute;left:18px;right:18px;bottom:18px;height:96px;display:flex;align-items:flex-end;gap:5px}
-.bigeq b{flex:1;height:100%;border-radius:2px;background:linear-gradient(to top,var(--amber),rgba(217,154,85,.25));transform-origin:bottom;transform:scaleY(.08);transition:transform .4s}
-body.playing .bigeq b{animation:eq 1s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 #rail{position:fixed;z-index:20;right:calc(var(--gx) - 8px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);opacity:0;transition:opacity .9s .4s;mix-blend-mode:difference}
 body.ready #rail{opacity:1}
@@ -375,25 +345,31 @@ body.ready #rail{opacity:1}
   .h-l{font-size:clamp(32px,9.6vw,52px)}
   .h-m{font-size:clamp(24px,6.6vw,34px)}
   #nav{padding:14px var(--gx);grid-template-columns:auto 1fr}
-  .menu,.mega{display:none}
-  #nav .wordmark{font-size:19px}
+  #nav{row-gap:8px}
+  .menu{grid-row:2;grid-column:1/-1;justify-content:center;gap:28px}
+  .mt{font-size:12px;padding:8px 0}
+  .mt::after{bottom:1px}
+  #nav .wordmark{gap:9px}
+  .brand-mark{width:28px;height:28px}
+  .brand-name{font-size:14px;letter-spacing:.18em}
+  #scrim{height:120px}
   .nav-r{gap:16px}
   .navcta{padding:10px 14px;font-size:14px;border-radius:12px}
-  .navplay{font-size:14px}
+  .navplay{font-size:12px;min-width:52px;gap:7px}
   #rail{display:none}
   #bar{display:block}
   .side-k{display:none}
   #uwHero{top:24%}
   #uwSlide{top:46%;font-size:36vw}
-  .film-head{left:var(--gx);right:var(--gx);width:auto;top:calc(var(--gy) + 52px)}
+  .film-head{left:var(--gx);right:var(--gx);width:auto;top:calc(var(--gy) + 82px)}
   .film-head .film-p{display:none}                       /* the headline alone on a phone: the masked lines would rewrap */
   .film-cap{bottom:max(30px,5vh);max-width:52vw}
   .film-cap .x{display:none}
   .film-sound{bottom:max(24px,4vh);padding:10px 14px 10px 12px;font-size:11px}
   .slide-label{bottom:max(36px,7vh)}
   .frame-cap{font-size:11px;top:-26px}.frame-cap.r{bottom:-26px}
-  .rec-head{top:calc(var(--gy) + 52px)}
-  .rec-count{top:calc(var(--gy) + 52px)}
+  .rec-head{top:calc(var(--gy) + 82px)}
+  .rec-count{top:calc(var(--gy) + 82px)}
   .rec-ui{top:14%;height:44%}
   .rec-ui:focus-visible::after{width:70vw;height:70vw}
   .rec-info{top:58%;gap:10px}
@@ -408,13 +384,13 @@ body.ready #rail{opacity:1}
   .ft-lead{grid-column:1/-1}
   .ft-legal{gap:6px 16px}
   .ft-legal span{flex-basis:100%}
-  .range-head{top:calc(var(--gy) + 52px)}
+  .range-head{top:calc(var(--gy) + 82px)}
   .range-hint{display:none}
   .rec-now{flex-direction:column;align-items:stretch;gap:16px;bottom:max(24px,4vh)}
   .rec-now-title{font-size:clamp(28px,9vw,44px)}
   .rec-now-ctl .pill{flex:1;justify-content:center;padding:13px 12px;letter-spacing:.08em}
   #scrim{height:70px;background:linear-gradient(to bottom,#000 0,#000 72%,rgba(0,0,0,0) 100%)}
-  .models-head{top:calc(var(--gy) + 52px)}
+  .models-head{top:calc(var(--gy) + 82px)}
   .fin-words{font-size:12vw}
   .models-cols{grid-template-columns:1fr;gap:6px;bottom:max(24px,4vh)}
   .models-cols.sel{gap:6px;bottom:max(28px,5vh)}
@@ -494,10 +470,6 @@ body.ready #rail{opacity:1}
 .navcta .rd-arm::before{width:5px;height:5px;left:-1.5px}
 .navcta .rd-arm::after{width:4px;height:5px}
 .navcta .rd-led{left:3px;bottom:4px;width:2px;height:2px}
-.navplay.rd-control{--rd-size:38px;--rd-art:28px;padding:4px 4px 4px 12px;gap:10px;font-size:10px;border-color:#ffffff18;background:linear-gradient(#211f1b,#0e0d0b);box-shadow:inset 0 1px 0 #ffffff18,0 2px 6px #0009}
-.navplay .rd-arm{display:none}
-.navplay .rd-vinyl{inset:3px}
-.navplay .rd-led{width:2px;height:2px;left:4px;bottom:4px}
 .hero-sound.rd-control{position:absolute;min-width:230px}
 .film-sound.rd-control{position:absolute}
 .pill.rd-control[aria-pressed="true"],.rec-cta .rd-control.on,.rec-now-ctl .rd-control.hot{background:radial-gradient(ellipse at 25% 0%,rgba(247,227,197,.17),transparent 66%),linear-gradient(180deg,#34312c 0%,#1c1a17 37%,#111110 70%,#1c1814 100%);border-color:#ac8557;color:var(--ink)}
@@ -508,12 +480,12 @@ body.ready #rail{opacity:1}
 .ft-btn.rd-control{min-width:230px;margin-top:22px}
 @media(max-width:760px){
   .nav-r{gap:10px}.navcta.rd-control{--rd-size:40px;--rd-art:28px;gap:10px;padding:5px 5px 5px 12px;font-size:9px}
-  .navplay.rd-control{--rd-size:34px;--rd-art:24px;gap:7px;padding:4px 4px 4px 9px;font-size:9px}
   .rd-control.rd-control{--rd-size:54px;--rd-art:40px;font-size:11px;gap:20px;padding-left:20px}
   .hero-sound.rd-control{min-width:214px}.rd-copy small{font-size:7px}
   .rec-now-ctl .rd-control{flex:1;justify-content:space-between;padding:6px 6px 6px 12px;gap:10px;font-size:9px;letter-spacing:.02em}
   .rd-mail .rd-letter{left:9px;top:11px}.rd-mail .rd-sleeve{left:8px;top:18px}
 }
+@media(max-width:760px){#nav .navcta.rd-control{--rd-size:40px;--rd-art:28px;gap:10px;padding:5px 5px 5px 12px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.rd-hardware{transform:none}.rd-vinyl,.rd-contact,.rd-letter{animation:none!important}.rd-control,.rd-hardware,.rd-arm,.rd-letter{transition:none}}
 
 </style>
@@ -538,51 +510,19 @@ body.ready #rail{opacity:1}
 
 <div id="scrim" aria-hidden="true"></div>
 <header id="nav">
-  <a class="wordmark" href="#hero" aria-label="Rondel, back to top" data-cursor="Top">RONDEL</a>
+  <a class="wordmark" href="#hero" aria-label="Rondel, back to top">
+    <svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="16.5" stroke="currentColor" stroke-width="1"/><path d="M8.8 25.8a12 12 0 0 1 0-15.6M27.2 10.2a12 12 0 0 1 0 15.6" stroke="currentColor" stroke-width=".65" opacity=".5"/><path d="M13 27V9h6a5 5 0 0 1 0 10h-6m6 0 5 8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <span class="brand-name">RONDEL</span>
+  </a>
   <nav class="menu" aria-label="Page">
-    <button class="mt" type="button" data-menu="object" data-act="1" aria-expanded="false" aria-controls="mega">Object <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="mt" type="button" data-menu="pressings" data-act="2" aria-expanded="false" aria-controls="mega">Pressings <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="mt" type="button" data-menu="lineup" data-act="3 4" aria-expanded="false" aria-controls="mega">Lineup <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="mt" type="button" data-menu="sound" aria-expanded="false" aria-controls="mega">Sound <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <a class="mt" href="#film" data-act="1">Object</a>
+    <a class="mt" href="#records" data-act="2">Pressings</a>
+    <a class="mt" href="#range" data-act="3 4">Lineup</a>
     <a class="mt" href="#foot">Contact</a>
   </nav>
   <div class="nav-r">
-    <button id="navPlay" class="navplay rd-control" type="button" aria-pressed="false" aria-label="Play the record" data-cursor="Play"><span class="rd-copy"><span class="lbl">Listen</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+    <button id="navPlay" class="navplay" type="button" aria-pressed="false" aria-label="Play the record"><span class="dot" aria-hidden="true"></span><span class="lbl">Listen</span></button>
     <a class="navcta rd-control" href="#foot" data-cursor="Reserve"><span class="rd-copy"><span class="t">Reserve one</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></a>
-  </div>
-  <div class="mega" id="mega" role="region" aria-label="Menu">
-    <div class="mpanel" data-menu="object">
-      <div class="mlist">
-        <button type="button" data-film="0">The whole object <small>01</small></button>
-        <button type="button" data-film="0.19">Platter <small>02</small></button>
-        <button type="button" data-film="0.365">Stylus <small>03</small></button>
-        <button type="button" data-film="0.525">Tonearm <small>04</small></button>
-        <button type="button" data-film="0.8">Plinth <small>06</small></button>
-      </div>
-      <button type="button" class="mcard" data-film="0"><span class="kick">Film</span><span class="ttl">Six shots, one take, one walnut board</span><span class="art"><span class="deckart"><span class="disc"><i></i></span><b></b></span></span></button>
-    </div>
-    <div class="mpanel" data-menu="pressings">
-      <div class="mlist" id="megaRecs"></div>
-      <button type="button" class="mcard" data-goto="records"><span class="kick">New</span><span class="ttl">Series one: ten pressings cut for this deck</span><span class="art"><span class="disc"><canvas id="megaLabel" width="160" height="160"></canvas></span></span></button>
-    </div>
-    <div class="mpanel" data-menu="lineup">
-      <div class="mlist">
-        <button type="button" data-goto="range">The whole range <small>06</small></button>
-        <button type="button" data-finish-go="walnut">One Walnut <small>Original</small></button>
-        <button type="button" data-finish-go="ink">One Ink <small>New</small></button>
-        <button type="button" data-finish-go="oak">One Pale Oak <small>New</small></button>
-      </div>
-      <button type="button" class="mcard" data-goto="models"><span class="kick">New</span><span class="ttl">Two new finishes, the same board underneath</span><span class="art"><span class="swatches"><span class="w">Walnut</span><span class="i">Ink</span><span class="o">Oak</span></span></span></button>
-    </div>
-    <div class="mpanel" data-menu="sound">
-      <div class="mlist">
-        <button type="button" data-snd="play"><span id="megaPlay">Play the record</span> <small>P</small></button>
-        <button type="button" data-snd="mute"><span id="megaMute">Mute</span> <small>M</small></button>
-        <button type="button" data-snd="speed"><span id="megaSpeed">Switch to 45</span> <small>RPM</small></button>
-        <button type="button" data-goto="records">Change the record <small>10</small></button>
-      </div>
-      <button type="button" class="mcard" data-snd="play"><span class="kick">On the deck</span><span class="ttl" id="megaNow">House pressing · LP-1047</span><span class="art"><span class="bigeq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></span></span></button>
-    </div>
   </div>
 </header>
 <aside id="rail" aria-hidden="true">
@@ -1452,72 +1392,15 @@ function scrollToSection(t, frac) {
 }
 for (const a of $$('a[href^="#"]')) a.addEventListener('click', e => {
   const h = a.getAttribute('href'); if (h === '#') { e.preventDefault(); return; }
-  closeMenu();
   const t = document.querySelector(h); if (!t) return;
   e.preventDefault(); scrollToSection(t);
 });
 
-// ---- the mega menu (desktop): hover or click a trigger, one shared panel; panels slide in from the side you came from --
-const MENUS = ['object', 'pressings', 'lineup', 'sound'];
-const mega = $('#mega'), megaBtns = $$('#nav .mt[data-menu]'), megaPanels = $$('.mpanel');
-let menuOpen = null, menuCloseT = 0, megaLabelT = 0, megaLabelI = 0, labelCanvases = null;
-labelsReady.then(c => { labelCanvases = c; drawMegaLabel(0); });
-function drawMegaLabel(i) {
-  const cv = $('#megaLabel'); if (!cv || !labelCanvases || !labelCanvases[i]) return;
-  const x = cv.getContext('2d'); x.clearRect(0, 0, cv.width, cv.height); x.drawImage(labelCanvases[i], 0, 0, cv.width, cv.height);
-}
-function openMenu(key) {
-  clearTimeout(menuCloseT);
-  if (key === menuOpen) return;
-  const from = MENUS.indexOf(menuOpen), to = MENUS.indexOf(key), dir = from < 0 ? 0 : Math.sign(to - from);
-  for (const pnl of megaPanels) {
-    const on = pnl.dataset.menu === key;
-    if (on) { pnl.classList.add('snap'); pnl.style.setProperty('--dx', dir); void pnl.offsetWidth; pnl.classList.remove('snap'); pnl.classList.add('on'); pnl.style.setProperty('--dx', 0); }
-    else if (pnl.classList.contains('on')) { pnl.style.setProperty('--dx', -dir); pnl.classList.remove('on'); }
-  }
-  for (const b of megaBtns) b.setAttribute('aria-expanded', b.dataset.menu === key ? 'true' : 'false');
-  mega.classList.add('open'); menuOpen = key;
-  clearInterval(megaLabelT);
-  if (key === 'pressings' && !reduced) megaLabelT = setInterval(() => { megaLabelI = (megaLabelI + 1) % RECORDS.length; drawMegaLabel(megaLabelI); }, 1800);
-}
-function closeMenu() {
-  clearTimeout(menuCloseT); clearInterval(megaLabelT);
-  if (!menuOpen) return;
-  mega.classList.remove('open'); menuOpen = null;
-  for (const b of megaBtns) b.setAttribute('aria-expanded', 'false');
-  setTimeout(() => { if (!menuOpen) for (const pnl of megaPanels) pnl.classList.remove('on'); }, 400);
-}
-const closeSoon = () => { clearTimeout(menuCloseT); menuCloseT = setTimeout(closeMenu, 220); };
-for (const b of megaBtns) {
-  if (!isTouch) b.addEventListener('pointerenter', () => openMenu(b.dataset.menu));
-  b.addEventListener('pointerleave', closeSoon);
-  b.addEventListener('click', () => { if (menuOpen === b.dataset.menu && isTouch) closeMenu(); else openMenu(b.dataset.menu); });
-}
-mega.addEventListener('pointerenter', () => clearTimeout(menuCloseT));
-mega.addEventListener('pointerleave', closeSoon);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-document.addEventListener('pointerdown', e => { if (menuOpen && !e.target.closest('#nav')) closeMenu(); });
-window.addEventListener('wheel', () => { if (menuOpen) closeSoon(); }, { passive: true });
-// the pressings list: the first five of series one
-{ const box = $('#megaRecs'); RECORDS.slice(0, 5).forEach((r, i) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.rec = i; b.innerHTML = `<span></span><small>${r.cat}</small>`; b.firstChild.textContent = r.title; b.addEventListener('pointerenter', () => drawMegaLabel(i)); box.appendChild(b); }); }
+// Scroll destinations shared by the pressing carousel and deck controls.
 function scrollToP(sec, p) {
   const y = sec.el.offsetTop + p * Math.max(0, sec.el.offsetHeight - vh);
   if (lenis) lenis.scrollTo(y, { duration: 1.8 }); else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
 }
-mega.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  const d = b.dataset;
-  if (d.film !== undefined) scrollToP(byId.film, +d.film);
-  else if (d.rec !== undefined) { scrollToP(byId.records, 0.3); carGo(+d.rec); }
-  else if (d.goto) scrollToP(byId[d.goto], d.goto === 'records' ? 0.3 : d.goto === 'range' ? 0.04 : 0.2);
-  else if (d.finishGo) { finishPick = d.finishGo; scrollToP(byId.models, 0.2); }
-  else if (d.snd) {
-    const t = window.TT; if (!t) return; t.unlockAudio();
-    if (d.snd === 'play') t.toggle(); else if (d.snd === 'mute') t.toggleMute(); else if (d.snd === 'speed') t.toggleSpeed();
-    return;                                   // the sound panel stays open: its labels follow the deck
-  }
-  closeMenu();
-});
 
 // ---- per-frame -----------------------------------------------------------------------------------------------
 let lastDriver = null, lastAct = 0, lastRailAct = -1, lastScrim = -1, frameDt = 1 / 60;
@@ -1622,10 +1505,6 @@ if (!isTouch && !reduced) for (const el of $$('.magnetic')) {
 function onState(st) {
   const active = st.phase === 'starting' || st.phase === 'playing';
   body.classList.toggle('playing', active);
-  $('#megaPlay').textContent = active ? 'Stop the record' : 'Play the record';
-  $('#megaMute').textContent = st.muted ? 'Unmute' : 'Mute';
-  $('#megaSpeed').textContent = st.speed === 45 ? 'Back to 33⅓' : 'Switch to 45';
-  { const tt = window.TT, i = tt ? tt.record : -1; $('#megaNow').textContent = i >= 0 ? `${RECORDS[i].title} · ${RECORDS[i].artist}` : 'House pressing · LP-1047'; }
   dom.navPlay.setAttribute('aria-pressed', active); dom.navPlay.querySelector('.lbl').textContent = active ? 'Playing' : 'Listen';
   dom.navPlay.setAttribute('aria-label', active ? 'Stop the record' : 'Play the record'); dom.navPlay.dataset.cursor = active ? 'Stop' : 'Play';
   // the sound controls show whether sound can be heard: the record may be playing silently (the film cues it without a
