@@ -10,6 +10,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=DM+Mono:wght@400;500&display=swap">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://madebysourasith-sudo.github.io" crossorigin>
+<link rel="preload" as="image" href="https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-08.jpg" crossorigin="anonymous" fetchpriority="high">
+<link rel="preload" as="image" href="https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-11.jpg" crossorigin="anonymous" fetchpriority="high">
+<link rel="preload" as="image" href="https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-14.jpg" crossorigin="anonymous" fetchpriority="high">
 <style>
 /* no Conthic file in .dream-loop/site2/fonts/ - the display stack falls back to Anton (Google Fonts) */
 /* RONDEL v2 — black ground, warm off-white type, one walnut-amber accent.
@@ -72,16 +78,8 @@ sup{line-height:0}
 #c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
 #grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
 #tip{position:fixed;z-index:30;opacity:0;pointer-events:none;font-size:1px;color:transparent}
-#cursor{position:fixed;left:0;top:0;z-index:60;pointer-events:none;opacity:0;transform:translate3d(-100px,-100px,0);transition:opacity .3s}
-body.cursor-on #cursor{opacity:1}
-body.cursor-on,body.cursor-on *{cursor:none!important}
-#cursor .dot{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--ink);transition:opacity .25s,transform .25s}
-#cursor .ring{position:absolute;left:-19px;top:-19px;width:38px;height:38px;border:1px solid var(--line-2);border-radius:50%;background:rgba(243,236,225,0);transition:transform .4s var(--ease),border-color .3s,background .3s}
-#cursor .lbl{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#120b05;opacity:0;white-space:nowrap;transition:opacity .25s}
-#cursor.hot .ring{transform:scale(2.05);background:var(--ink);border-color:var(--ink)}
-#cursor.hot .dot{opacity:0}
-#cursor.hot .lbl{opacity:1}
-#cursor.down .ring{transform:scale(1.7)}
+#c.pointer{cursor:pointer}
+a{cursor:pointer}
 
 /* ---- nav / rail / cue ---------------------------------------------------------------------------------------- */
 /* a black-to-transparent band between the page and the nav: content sliding out fades before it reaches the links
@@ -101,9 +99,6 @@ body.ready #nav{opacity:1;transform:none}
 .mt:hover::after{opacity:.55}
 .mt.on::after{opacity:.3}
 #nav a:focus-visible,#nav button:focus-visible{outline:1px solid var(--amber);outline-offset:5px}
-body.cursor-on #nav,body.cursor-on #nav *{cursor:auto!important}
-body.cursor-on #nav a,body.cursor-on #nav a *,body.cursor-on #nav button,body.cursor-on #nav button *{cursor:pointer!important}
-body:has(#nav:hover) #cursor{opacity:0}
 .nav-r{justify-self:end;display:flex;align-items:center;gap:22px}
 .navplay{display:inline-flex;align-items:center;gap:8px;padding:12px 0;min-width:60px;background:none;border:0;border-radius:0;box-shadow:none;font:400 13px/1 var(--sans);letter-spacing:.025em;color:var(--ink-2);transition:color .2s}
 .navplay:hover,.navplay[aria-pressed="true"]{color:var(--ink)}
@@ -320,18 +315,18 @@ body.ready #rail{opacity:1}
 .out-head{position:absolute;left:var(--gx);top:calc(var(--gy) + 70px);opacity:var(--oo,1)}
 .out-head .k{margin-bottom:12px;color:var(--amber)}
 
-/* loader: a record in single warm lines on black; it draws itself, then lands on the hero's record */
-#loader{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,var(--bga,1));color:var(--ink)}
-#loader.leaving{pointer-events:none}
+/* Loading progress stays visible while textures and GPU programs prepare. */
+#loader{position:fixed;inset:0;z-index:50;display:grid;place-content:center;gap:28px;background:#000;color:var(--ink);opacity:1;transition:opacity .5s ease}
+#loader.leaving{opacity:0;pointer-events:none}
 #loader.hide{visibility:hidden}
-/* (the drawn record was removed: the loader is a plain black cover) */
-.ld-rec-unused{--S:min(46vh,62vw);position:absolute;left:50%;top:50%;width:var(--S);height:var(--S);margin:calc(var(--S) / -2) 0 0 calc(var(--S) / -2);overflow:visible;transform-origin:50% 50%;opacity:var(--lo,1);will-change:transform}
-.ld-rec .ln{fill:none;stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:1 1;stroke-dashoffset:1;stroke-linecap:round}
-.ld-rec .rim,.ld-rec .lab{opacity:.88}
-.ld-rec .gr{opacity:calc(.26 * var(--g,1))}
-.ld-rec .hole{opacity:.6}
-#loaderText{position:absolute;left:var(--gx);right:var(--gx);bottom:var(--gy);text-align:center;color:var(--ink-3);display:none}
-#loader.error #loaderText{display:block;text-transform:none;letter-spacing:.02em;font-family:var(--sans);font-size:14px}
+.loader-brand{display:flex;align-items:center;justify-content:center;gap:14px}
+.loader-brand svg{width:38px;height:38px}
+.loader-brand span{font:600 19px/1 var(--sans);letter-spacing:.24em}
+.loader-track{position:relative;width:192px;height:1px;background:var(--line)}
+#loaderBar{display:block;height:1px;background:var(--amber);transform:scaleX(var(--load,0));transform-origin:left;transition:transform .25s ease}
+#loaderText{margin:0;font:400 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);text-align:center}
+#loader.error #loaderText{max-width:32ch;line-height:1.6;text-transform:none;letter-spacing:.02em}
+@media(prefers-reduced-motion:reduce){#loader,#loaderBar{transition:none}}
 
 /* ---- phones -------------------------------------------------------------------------------------------------- */
 @media (max-width:760px){
@@ -506,7 +501,6 @@ body.ready #rail{opacity:1}
   <div id="fade"></div>
 </div>
 <div id="tip" role="tooltip"></div>
-<div id="cursor" aria-hidden="true"><span class="ring"></span><span class="dot"></span><span class="lbl" id="cursorLbl"></span></div>
 
 <div id="scrim" aria-hidden="true"></div>
 <header id="nav">
@@ -522,7 +516,7 @@ body.ready #rail{opacity:1}
   </nav>
   <div class="nav-r">
     <button id="navPlay" class="navplay" type="button" aria-pressed="false" aria-label="Play the record"><span class="dot" aria-hidden="true"></span><span class="lbl">Listen</span></button>
-    <a class="navcta rd-control" href="#foot" data-cursor="Reserve"><span class="rd-copy"><span class="t">Reserve one</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></a>
+    <a class="navcta rd-control" href="#foot"><span class="rd-copy"><span class="t">Reserve one</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></a>
   </div>
 </header>
 <aside id="rail" aria-hidden="true">
@@ -538,7 +532,7 @@ body.ready #rail{opacity:1}
 <!-- 01 · HERO: nav, the wordmark (behind the deck, in #under), the deck. Nothing else. ----------------------------- -->
 <section class="ch" id="hero" data-len="220" data-act="1">
   <div class="stage">
-    <button id="heroSound" class="pill ghost magnetic hero-sound rd-control" type="button" aria-pressed="false" data-cursor="Sound"><span class="rd-copy"><span class="t">Turn sound on</span><small>Analog, always</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+    <button id="heroSound" class="pill ghost hero-sound rd-control" type="button" aria-pressed="false"><span class="rd-copy"><span class="t">Turn sound on</span><small>Analog, always</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
     <h1 class="sr-only">Rondel One, the walnut turntable</h1>
   </div>
 </section>
@@ -564,7 +558,7 @@ body.ready #rail{opacity:1}
       <p class="body film-p"><span class="l nowrap" style="--i:2"><span>Walnut, aluminium, steel. Nothing on it</span></span><span class="l nowrap" style="--i:3"><span>that does not touch the sound.</span></span></p>
     </div>
     <p class="k film-cap" id="filmCap" aria-hidden="true"><span class="l"><span><b id="filmCapNum">01</b><span id="filmCapTxt">The whole object</span><span class="x" id="filmCapX"></span></span></span></p>
-    <button id="filmSound" class="pill ghost magnetic film-sound rd-control" type="button" aria-pressed="false" aria-label="Turn the sound on" data-cursor="Sound"><span class="rd-copy"><span class="t">Sound off</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+    <button id="filmSound" class="pill ghost film-sound rd-control" type="button" aria-pressed="false" aria-label="Turn the sound on"><span class="rd-copy"><span class="t">Sound off</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
   </div>
 </section>
 
@@ -594,20 +588,20 @@ body.ready #rail{opacity:1}
       <h2 class="disp h-m"><span class="l" style="--i:1"><span>Choose a side.</span></span></h2>
     </div>
     <p class="k rec-count" aria-hidden="true"><span id="recIdx">01</span><span class="dim"> / 10</span></p>
-    <div class="rec-ui" id="recUi" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Rondel pressings, series one. Scroll, or use the arrow keys, to browse the records." data-cursor="Pick">
+    <div class="rec-ui" id="recUi" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Rondel pressings, series one. Scroll, or use the arrow keys, to browse the records.">
       <span class="sr-only" id="recLive" aria-live="polite"></span>
     </div>
     <div class="rec-info">
-      <button class="rec-arrow magnetic" id="recPrev" type="button" aria-label="Previous record" data-cursor="Prev">←</button>
+      <button class="rec-arrow magnetic" id="recPrev" type="button" aria-label="Previous record">←</button>
       <div class="rec-meta" id="recMeta">
         <p class="disp rec-title l" style="--i:0"><span id="recTitle">Sideboard Music</span></p>
         <p class="body rec-artist l" style="--i:1"><span id="recArtist">The Jura Quartet</span></p>
         <p class="k dim rec-cat l" style="--i:2"><span id="recCat">RP-01 · 2026 · side A 19:40</span></p>
       </div>
-      <button class="rec-arrow magnetic" id="recNext" type="button" aria-label="Next record" data-cursor="Next">→</button>
+      <button class="rec-arrow magnetic" id="recNext" type="button" aria-label="Next record">→</button>
     </div>
     <div class="rec-cta">
-      <button id="recPut" class="pill magnetic rd-control" type="button" data-cursor="Play"><span class="rd-copy"><span class="t">Put it on</span><small>Drop the needle</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+      <button id="recPut" class="pill rd-control" type="button"><span class="rd-copy"><span class="t">Put it on</span><small>Drop the needle</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
       <p class="k dim rec-hint" id="recHint">Scroll to browse the series</p>
     </div>
     <div class="rec-now" id="recNow" aria-live="polite">
@@ -617,8 +611,8 @@ body.ready #rail{opacity:1}
         <p class="body rec-now-artist" id="recNowArtist">The Jura Quartet</p>
       </div>
       <div class="rec-now-ctl">
-        <button id="recNowPlay" class="pill ghost magnetic rd-control" type="button" data-cursor="Stop"><span class="rd-copy"><span class="t">Stop</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
-        <button id="recBack" class="pill magnetic rd-control" type="button" data-cursor="Back"><span class="rd-copy"><span class="t">Back to the row</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+        <button id="recNowPlay" class="pill ghost rd-control" type="button"><span class="rd-copy"><span class="t">Stop</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+        <button id="recBack" class="pill rd-control" type="button"><span class="rd-copy"><span class="t">Back to the row</span></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-arm"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
       </div>
     </div>
   </div>
@@ -627,7 +621,7 @@ body.ready #rail{opacity:1}
 <!-- 05 · THE RANGE: six decks in a Flex Carousel (WebGL lens, after reactbits.dev); the scroll walks the strip ------ -->
 <section class="ch" id="range" data-len="320" data-act="3" data-opaque>
   <div class="stage">
-    <div class="flex-carousel" id="rangeFc" tabindex="0" role="region" aria-roledescription="carousel" aria-label="The Rondel range: six turntables. Scroll, drag or use the arrow keys to browse." data-cursor="Drag"></div>
+    <div class="flex-carousel" id="rangeFc" tabindex="0" role="region" aria-roledescription="carousel" aria-label="The Rondel range: six turntables. Scroll, drag or use the arrow keys to browse."></div>
     <p class="k side-k"><span class="l"><span>03 — The range</span></span></p>
     <div class="range-head rv">
       <p class="k"><span class="l" style="--i:0"><span>Six decks, one workshop</span></span></p>
@@ -646,9 +640,9 @@ body.ready #rail{opacity:1}
       <div class="l" style="--i:1"><div class="fin-words disp h-xl" aria-hidden="true"><span class="fw" data-f="walnut">One Walnut</span><span class="fw" data-f="ink">One Ink</span><span class="fw" data-f="oak">One Pale Oak</span></div></div>
     </div>
     <div class="models-cols sel rv">
-      <button class="model l magnetic" style="--i:0" type="button" data-finish="walnut" aria-pressed="true" data-cursor="Walnut"><span><span class="new">Original</span><h3>One Walnut</h3><p class="body sm">Black walnut heartwood, oiled. The one in every photograph on this page.</p><dl><dt>Finish</dt><dd>Hand-oiled walnut</dd><dt>Weight</dt><dd>5.8 kg</dd><dt>Price</dt><dd>€1,490</dd></dl></span></button>
-      <button class="model l magnetic" style="--i:1" type="button" data-finish="ink" aria-pressed="false" data-cursor="Ink"><span><span class="new">New</span><h3>One Ink</h3><p class="body sm">The same board under twelve coats of black lacquer, rubbed back until the grain shows through.</p><dl><dt>Finish</dt><dd>Black lacquer</dd><dt>Weight</dt><dd>5.9 kg</dd><dt>Price</dt><dd>€1,690</dd></dl></span></button>
-      <button class="model l magnetic" style="--i:2" type="button" data-finish="oak" aria-pressed="false" data-cursor="Oak"><span><span class="new">New</span><h3>One Pale Oak</h3><p class="body sm">Quarter-sawn oak, soaped white. Lighter in the room, identical underneath.</p><dl><dt>Finish</dt><dd>Soaped pale oak</dd><dt>Weight</dt><dd>5.4 kg</dd><dt>Price</dt><dd>€1,490</dd></dl></span></button>
+      <button class="model l magnetic" style="--i:0" type="button" data-finish="walnut" aria-pressed="true"><span><span class="new">Original</span><h3>One Walnut</h3><p class="body sm">Black walnut heartwood, oiled. The one in every photograph on this page.</p><dl><dt>Finish</dt><dd>Hand-oiled walnut</dd><dt>Weight</dt><dd>5.8 kg</dd><dt>Price</dt><dd>€1,490</dd></dl></span></button>
+      <button class="model l magnetic" style="--i:1" type="button" data-finish="ink" aria-pressed="false"><span><span class="new">New</span><h3>One Ink</h3><p class="body sm">The same board under twelve coats of black lacquer, rubbed back until the grain shows through.</p><dl><dt>Finish</dt><dd>Black lacquer</dd><dt>Weight</dt><dd>5.9 kg</dd><dt>Price</dt><dd>€1,690</dd></dl></span></button>
+      <button class="model l magnetic" style="--i:2" type="button" data-finish="oak" aria-pressed="false"><span><span class="new">New</span><h3>One Pale Oak</h3><p class="body sm">Quarter-sawn oak, soaped white. Lighter in the room, identical underneath.</p><dl><dt>Finish</dt><dd>Soaped pale oak</dd><dt>Weight</dt><dd>5.4 kg</dd><dt>Price</dt><dd>€1,490</dd></dl></span></button>
     </div>
   </div>
 </section>
@@ -672,7 +666,7 @@ body.ready #rail{opacity:1}
       <p class="ft-promise">Every deck ships within 24 business hours.<br>Ten-year plinth warranty<br>30-day returns</p>
       <p class="ft-news-h">Get the season letter from Rondel.</p>
       <p class="ft-news-p">Four letters a year: first call on each batch, new pressings, finishes, workshop notes and listening-room dates, delivered to your inbox.</p>
-      <button class="ft-btn magnetic rd-control rd-mail" type="button" data-cursor="Sign up"><span class="rd-copy"><span class="t">Sign up</span><small>The season letter</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-letter"></span><span class="rd-sleeve"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
+      <button class="ft-btn rd-control rd-mail" type="button"><span class="rd-copy"><span class="t">Sign up</span><small>The season letter</small></span><span class="rd-hardware" aria-hidden="true"><span class="rd-bezel"></span><span class="rd-glass"><span class="rd-vinyl"></span><span class="rd-letter"></span><span class="rd-sleeve"></span><span class="rd-led"></span><span class="rd-contact"></span></span></span></button>
     </div>
     <nav class="ft-col" aria-label="Service"><p class="ft-h">Service</p><a href="#">Help Center</a><a href="#">Setup guide</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Warranty</a><a href="#">Listening rooms</a></nav>
     <nav class="ft-col" aria-label="Company"><p class="ft-h">Company</p><a href="#">About</a><a href="#">Workshop</a><a href="#">Press</a><a href="#">Image bank</a></nav>
@@ -685,7 +679,7 @@ body.ready #rail{opacity:1}
 
 </main>
 
-<div id="loader" role="status" aria-live="polite"><span class="sr-only">Loading Rondel One</span><p class="k" id="loaderText"></p></div>
+<div id="loader" role="status" aria-live="polite"><div class="loader-brand"><svg  viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="16.5" stroke="currentColor" stroke-width="1"/><path d="M8.8 25.8a12 12 0 0 1 0-15.6M27.2 10.2a12 12 0 0 1 0 15.6" stroke="currentColor" stroke-width=".65" opacity=".5"/><path d="M13 27V9h6a5 5 0 0 1 0 10h-6m6 0 5 8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>RONDEL</span></div><div class="loader-track" aria-hidden="true"><i id="loaderBar"></i></div><p id="loaderText">Loading</p></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -706,9 +700,12 @@ const easeOut = t => 1 - Math.pow(1 - t, 3), easeInOut = t => t < .5 ? 4 * t * t
 const easeOutExpo = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isTouch = matchMedia('(hover: none)').matches;
-let vw = innerWidth, vh = innerHeight, mobile = vw < 760;
+let vw = innerWidth, vh = innerHeight, mobile = vw < 760, pageHeight = 1;
 const body = document.body;
-const setv = (el, k, v) => el.style.setProperty(k, typeof v === 'number' ? (Math.round(v * 1000) / 1000) + '' : v);
+const setv = (el, k, v) => {
+  const value = typeof v === 'number' ? (Math.round(v * 1000) / 1000) + '' : v;
+  if (el.style.getPropertyValue(k) !== value) el.style.setProperty(k, value);
+};
 const px = v => Math.round(v * 10) / 10 + 'px';
 const pad2 = n => String(n).padStart(2, '0');
 const ACTS = ['The object', 'The pressings', 'The range', 'The lineup'];
@@ -731,11 +728,11 @@ const dom = {
   navPlay: $('#navPlay'),
   recUi: $('#recUi'), recIdx: $('#recIdx'), recTitle: $('#recTitle'), recArtist: $('#recArtist'), recCat: $('#recCat'), recMeta: $('#recMeta'), recPrev: $('#recPrev'), recNext: $('#recNext'), recPut: $('#recPut'), recHint: $('#recHint'), recLive: $('#recLive'), recNow: $('#recNow'), recNowState: $('#recNowState'), recNowTitle: $('#recNowTitle'), recNowArtist: $('#recNowArtist'), recNowPlay: $('#recNowPlay'), recBack: $('#recBack'),
   loader: $('#loader'), loaderText: $('#loaderText'),
-  ftWord: $('#ftWord'), cursor: $('#cursor'), cursorLbl: $('#cursorLbl'), tip: $('#tip')
+  ftWord: $('#ftWord'), tip: $('#tip')
 };
 const UNDER = { hero: dom.uwHero, slide: dom.uwSlide, models: dom.uwModels };
 // ---- depth text on the hero wordmark --------------------------------------------------------------------------------
-const DEPTH = { layers: 30, step: 0.0078, face: '#f3ece1', back: '#3b2210', tilt: 7.5, smoothing: 0.14, orbit: 0.11, x: 0, y: 0, idle: 0 };
+const DEPTH = { layers: 12, step: 0.0195, face: '#f3ece1', back: '#3b2210', tilt: 7.5, smoothing: 0.14, orbit: 0.11, x: 0, y: 0, idle: 0 };
 DEPTH.base = { x: -DEPTH.tilt * 0.32, y: DEPTH.tilt * 0.42 }; DEPTH.x = DEPTH.base.x; DEPTH.y = DEPTH.base.y;
 const depthStage = $('#heroDepthStage'), footStages = $$('.ft-stage');
 function buildDepth(stage, text, layers, deep = 1) {
@@ -750,19 +747,10 @@ function buildDepth(stage, text, layers, deep = 1) {
   stage.insertBefore(frag, stage.firstChild);
 }
 buildDepth(depthStage, $('#heroDepth').dataset.text, DEPTH.layers);
-footStages.forEach(st => buildDepth(st, st.textContent, 24, 1.7));   // per letter, so the letters can still rise one by one
-let depthMoved = -1e9;
-if (!isTouch) window.addEventListener('pointermove', () => { depthMoved = performance.now(); }, { passive: true });
-function depthTick(now, stages) {
-  stages = stages || [depthStage];
-  if (reduced) { for (const st of stages) st.style.transform = `rotateX(${DEPTH.base.x}deg) rotateY(${DEPTH.base.y}deg)`; return; }
-  // the pointer tilts it (ptr is already smoothed); left alone it orbits slowly, wider on touch screens
-  const live = now - depthMoved < 2500, o = now / 1000 * DEPTH.orbit * Math.PI * 2, amt = live ? 0.18 : 0.55;
-  const tx = DEPTH.base.x - (live ? ptr.y : 0) * DEPTH.tilt + Math.sin(o) * DEPTH.tilt * amt;
-  const ty = DEPTH.base.y + (live ? ptr.x : 0) * DEPTH.tilt + Math.cos(o * 0.85) * DEPTH.tilt * amt;
-  DEPTH.x += (tx - DEPTH.x) * DEPTH.smoothing; DEPTH.y += (ty - DEPTH.y) * DEPTH.smoothing;
-  const tf = `rotateX(${DEPTH.x.toFixed(3)}deg) rotateY(${DEPTH.y.toFixed(3)}deg)`;
-  for (const st of stages) st.style.transform = tf;
+footStages.forEach(st => buildDepth(st, st.textContent, 8, 1.7));   // per letter, so the letters can still rise one by one
+function depthTick(now, stages = [depthStage]) {
+  const tf = `rotateX(${DEPTH.base.x}deg) rotateY(${DEPTH.base.y}deg)`;
+  for (const st of stages) if (st.style.transform !== tf) st.style.transform = tf;
 }
 let slideW = 0;
 
@@ -790,15 +778,16 @@ function measure() {
       for (const c of fw.children) { c.style.lineHeight = (FA + FD).toFixed(1) + 'px'; c.style.marginTop = (-(FA - A)).toFixed(1) + 'px'; }
     } }
   car.slotPx = clamp(vw * 0.18, 110, 300);
+  for (const s of sections) { s.top = s.el.offsetTop; s.height = s.el.offsetHeight; }
+  pageHeight = document.documentElement.scrollHeight;
 }
 
 // ---- pointer parallax ------------------------------------------------------------------------------------
 const ptr = { x: 0, y: 0, tx: 0, ty: 0 };
-if (!isTouch) window.addEventListener('pointermove', e => { ptr.tx = (e.clientX / vw) * 2 - 1; ptr.ty = (e.clientY / vh) * 2 - 1; }, { passive: true });
 
 // ---- camera presets (spherical, cm) ------------------------------------------------------------------------
 const CAM = {
-  intro:  { r: 168, phi: 1.26, theta: 0.98, tx: 10, ty: 4, tz: 2 },
+  intro:  { r: 150, phi: 1.22, theta: 0.68, tx: 7, ty: 7, tz: 2 },
   hero:   { r: 138, phi: 1.191, theta: 0.4718, tx: 6, ty: 9, tz: 2 },     // the reference photo's view; the deck sits under the wordmark
   heroM:  { r: 84, phi: 1.191, theta: 0.4718, tx: 1, ty: 14, tz: 2 },     // (portrait lens: closer, the deck in the lower half)
   pm:     { r: 108, phi: 1.0, theta: 0.64, tx: 0, ty: 8.0, tz: 0 },       // the product moment: centred, large, a little higher and further round (= FILM[0].a)
@@ -854,7 +843,7 @@ function tickRevs(dt) {
 }
 const entry = s => easeOut(sm(0.08, 0.92, s.e));   // reveal curve for type that arrives with the stage
 
-// intro (after the loader): 0..1 over ~2.4 s, mixes the camera from CAM.intro and lifts the hero wordmark
+// intro (after the loader): 0..1 over ~1.6 s, mixes the camera from CAM.intro and lifts the hero wordmark
 const intro = { t0: 0, k: reduced ? 1 : 0, done: reduced };
 
 // ---- the film: camera states + interpolation ---------------------------------------------------------------------
@@ -984,7 +973,7 @@ const chapters = {
       setCam(tmpCam);
       setRig(approachRig(k));
       setEnv({ ground: 1 });
-      TT().goal.damp = intro.k < 1 ? 2.2 : 6;
+      TT().goal.damp = intro.k < 1 ? 7 : 8;
     }
   },
   // the exploded view. Entry: the hero's approach finishes (camera to the product moment). Pinned: the lens pushes in
@@ -1360,7 +1349,7 @@ function refreshNow() {
   dom.recNowState.textContent = !car.landed ? 'Dropping the needle' : !active ? 'Stopped' : starting ? 'Dropping the needle' : audible ? 'Now playing' : 'Playing · sound off';
   dom.recNow.classList.toggle('playing', active && !starting);
   const lbl = active && !audible ? 'Sound on' : active ? 'Stop' : 'Play';
-  dom.recNowPlay.querySelector('.t').textContent = lbl; dom.recNowPlay.dataset.cursor = lbl === 'Sound on' ? 'Sound' : lbl;
+  dom.recNowPlay.querySelector('.t').textContent = lbl;
   dom.recNowPlay.classList.toggle('hot', lbl === 'Sound on');
 }
 dom.recPut.addEventListener('click', putOn);
@@ -1382,13 +1371,13 @@ dom.recNowPlay.addEventListener('click', () => {
 // ---- Lenis ---------------------------------------------------------------------------------------------------
 let lenis = null;
 if (!reduced && window.Lenis) {
-  lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 1, smoothWheel: true, syncTouch: false });
+  lenis = new Lenis({ lerp: 0.12, wheelMultiplier: 1, smoothWheel: true, syncTouch: false });
   lenis.stop();
 }
 window.__lenis = lenis;                       // QA hook
 function scrollToSection(t, frac) {
   const y = t.classList.contains('ch') ? t.offsetTop + Math.min(t.offsetHeight - vh, vh * (frac ?? 0.35)) : t.offsetTop - 40;
-  if (lenis) lenis.scrollTo(y, { duration: 1.6 }); else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+  if (lenis) lenis.scrollTo(y, { duration: 1.15 }); else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
 }
 for (const a of $$('a[href^="#"]')) a.addEventListener('click', e => {
   const h = a.getAttribute('href'); if (h === '#') { e.preventDefault(); return; }
@@ -1399,7 +1388,7 @@ for (const a of $$('a[href^="#"]')) a.addEventListener('click', e => {
 // Scroll destinations shared by the pressing carousel and deck controls.
 function scrollToP(sec, p) {
   const y = sec.el.offsetTop + p * Math.max(0, sec.el.offsetHeight - vh);
-  if (lenis) lenis.scrollTo(y, { duration: 1.8 }); else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+  if (lenis) lenis.scrollTo(y, { duration: 1.25 }); else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
 }
 
 // ---- per-frame -----------------------------------------------------------------------------------------------
@@ -1409,8 +1398,7 @@ const usedUnder = new Set();
 function frame(dt, now) {
   frameDt = dt;
   if (lenis) lenis.raf(now);
-  if (!intro.done) { if (!intro.t0) intro.t0 = now; intro.k = clamp((now - intro.t0) / 2400, 0, 1); if (intro.k >= 1) intro.done = true; }
-  ptr.x += (ptr.tx - ptr.x) * 0.08; ptr.y += (ptr.ty - ptr.y) * 0.08;
+  if (bootReady && !intro.done) { if (!intro.t0) intro.t0 = now; intro.k = clamp((now - intro.t0) / 1600, 0, 1); if (intro.k >= 1) intro.done = true; }
   const y = window.scrollY || window.pageYOffset || 0;
   const visible = [];
   let coveredTop = false, coveredBottom = false, center = null;
@@ -1459,7 +1447,7 @@ function frame(dt, now) {
     lastDriver = driver;
   }
   // progress rail / phone bar / nav act
-  const max = Math.max(1, document.documentElement.scrollHeight - vh), prog = clamp(y / max, 0, 1);
+  const max = Math.max(1, pageHeight - vh), prog = clamp(y / max, 0, 1);
   setv(dom.railDot, '--rp', prog); setv(dom.barFill, '--bp', prog);
   const act = center ? center.act : 1;
   if (act !== lastRailAct) {
@@ -1467,38 +1455,6 @@ function frame(dt, now) {
     for (const a of dom.navLinks) a.classList.toggle('on', a.dataset.act.split(' ').includes(String(act)));
     lastRailAct = act;
   }
-  updateCursor();
-}
-
-// ---- custom cursor (desktop only) --------------------------------------------------------------------------------
-const cur = { x: -100, y: -100, tx: -100, ty: -100, on: false, hot: false, label: '', tipLabel: '' };
-if (!isTouch && !reduced && matchMedia('(pointer: fine)').matches) {
-  window.addEventListener('pointermove', e => { cur.tx = e.clientX; cur.ty = e.clientY; if (!cur.on) { cur.on = true; cur.x = cur.tx; cur.y = cur.ty; body.classList.add('cursor-on'); } }, { passive: true });
-  document.addEventListener('pointerover', e => { const t = e.target.closest ? e.target.closest('[data-cursor]') : null; cur.label = t ? t.dataset.cursor : ''; });
-  document.addEventListener('pointerdown', () => dom.cursor.classList.add('down'));
-  document.addEventListener('pointerup', () => dom.cursor.classList.remove('down'));
-  document.documentElement.addEventListener('pointerleave', () => { cur.on = false; body.classList.remove('cursor-on'); });
-}
-function updateCursor() {
-  if (!cur.on) return;
-  cur.x += (cur.tx - cur.x) * 0.22; cur.y += (cur.ty - cur.y) * 0.22;
-  dom.cursor.style.transform = `translate3d(${cur.x.toFixed(1)}px,${cur.y.toFixed(1)}px,0)`;
-  // the 3D scene reports hovered parts through #tip; the cursor turns it into a verb
-  let lbl = cur.label;
-  const hot = !!lbl;
-  if (hot !== cur.hot) { cur.hot = hot; dom.cursor.classList.toggle('hot', hot); }
-  if (lbl && lbl !== cur.tipLabel) { cur.tipLabel = lbl; dom.cursorLbl.textContent = lbl; }
-}
-
-// ---- magnetic buttons (desktop only) ----------------------------------------------------------------------------
-if (!isTouch && !reduced) for (const el of $$('.magnetic')) {
-  let raf = 0;
-  el.addEventListener('pointerenter', () => { el.style.transition = 'transform .18s ease-out'; });
-  el.addEventListener('pointermove', e => {
-    const r = el.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
-    cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { el.style.transform = `translate3d(${(dx * 0.26).toFixed(1)}px,${(dy * 0.26).toFixed(1)}px,0)`; });
-  });
-  el.addEventListener('pointerleave', () => { cancelAnimationFrame(raf); el.style.transition = 'transform .7s cubic-bezier(.2,.7,.2,1)'; el.style.transform = ''; });
 }
 
 // ---- deck controls ---------------------------------------------------------------------------------------
@@ -1506,7 +1462,7 @@ function onState(st) {
   const active = st.phase === 'starting' || st.phase === 'playing';
   body.classList.toggle('playing', active);
   dom.navPlay.setAttribute('aria-pressed', active); dom.navPlay.querySelector('.lbl').textContent = active ? 'Playing' : 'Listen';
-  dom.navPlay.setAttribute('aria-label', active ? 'Stop the record' : 'Play the record'); dom.navPlay.dataset.cursor = active ? 'Stop' : 'Play';
+  dom.navPlay.setAttribute('aria-label', active ? 'Stop the record' : 'Play the record');
   // the sound controls show whether sound can be heard: the record may be playing silently (the film cues it without a
   // gesture, and browsers keep audio locked until one); the first press unlocks, after that they mute / unmute
   const audible = !!st.audible;
@@ -1545,39 +1501,43 @@ window.addEventListener('keydown', e => {
 // ---- loader / boot ----------------------------------------------------------------------------------------
 let progress = 0;
 function showProgress(f) {
-  progress = Math.max(progress, f);
+  progress = Math.max(progress, clamp(f, 0, 1));
+  dom.loader.style.setProperty("--load", progress);
 }
 let fallbackLoop = null;
 function ready() {
   if (bootReady) return; bootReady = true;
   measure();
   document.fonts.ready.then(() => { measure(); if (window.TT) window.TT.render(); });
+  intro.t0 = performance.now(); intro.k = reduced ? 1 : 0; intro.done = reduced;
   body.classList.add('ready');
-  const finish = () => { dom.loader.classList.add('hide'); if (lenis) lenis.start(); if (window.TT) window.TT.render(); };
-  if (reduced || !window.gsap) {
-    intro.k = 1; intro.done = true; finish();
-    return;
-  }
-  // no loading animation: the screen stays black until the deck is ready, then fades up on the hero as it settles
-  intro.t0 = 0; intro.k = 0; intro.done = false;
+  const finish = () => { dom.loader.classList.add('hide'); if (window.TT) window.TT.render(); };
+  if (lenis) lenis.start();
   dom.loader.classList.add('leaving');
-  gsap.to(dom.loader, { opacity: 0, duration: 1.1, ease: 'power2.inOut', delay: 0.1, onComplete: finish });
+  if (reduced) finish(); else setTimeout(finish, 520);
 }
 window.SITE = {
   frame, onState,
   records: RECORDS, labelsReady,          // the pressings (the scene builds the row from these)
   get pressings() { return { pos: car.pos, target: car.target, idx: car.idx, chosen: car.chosen, dragging: car.dragging, vel: car.vel || 0, slotPx: car.slotPx }; },   // read-only, for QA
   onProgress: showProgress,
-  onReady() { showProgress(1); setTimeout(ready, 220); },
+  onReady() {
+    clearTimeout(bootWatchdog);
+    if (fallbackLoop) { cancelAnimationFrame(fallbackLoop); fallbackLoop = null; }
+    showProgress(1); ready();
+  },
   onError(err) {
-    dom.loader.classList.add('error'); dom.loaderText.textContent = 'The 3D scene could not start (' + (err && err.message ? err.message : err) + '). The page still scrolls.';
+    if (bootReady) return;
+    dom.loader.classList.add('error'); dom.loaderText.textContent = 'The 3D view is unavailable. You can still browse the page.';
+    console.warn('Rondel scene unavailable:', err);
     setTimeout(() => { showProgress(1); ready(); }, 1800);
     if (!fallbackLoop) { let last = performance.now(); const loop = now => { fallbackLoop = requestAnimationFrame(loop); frame(Math.min(0.05, (now - last) / 1000), now); last = now; }; fallbackLoop = requestAnimationFrame(loop); }
   }
 };
 // if the module never reports (blocked CDN, no WebGL), fall back after 12 s so the page is still usable
-setTimeout(() => { if (!bootReady) window.SITE.onError(new Error('timed out')); }, 12000);
-window.addEventListener('resize', () => { measure(); if (window.TT) window.TT.render(); });
+const bootWatchdog = setTimeout(() => { if (!bootReady) window.SITE.onError(new Error('timed out')); }, 30000);
+let measureRaf = 0;
+window.addEventListener('resize', () => { cancelAnimationFrame(measureRaf); measureRaf = requestAnimationFrame(() => { measure(); if (window.TT) window.TT.render(); }); }, { passive: true });
 window.addEventListener('load', measure);
 measure();
 carMeta(0);
@@ -1662,7 +1622,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ------------------------------------------------------------------ */
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, stencil: true, powerPreference: 'high-performance' });   // stencil: the exploded view's well
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 1.75 : 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 1.35 : 1.5));
 renderer.setClearColor(0x000000, 0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 // Tone curve: linear up to 0.72 then a smooth exponential shoulder (per channel). Unlike the Neutral
@@ -1678,7 +1638,7 @@ if (THREE.ShaderChunk.tonemapping_pars_fragment.includes('vec3 CustomToneMapping
 renderer.toneMappingExposure = 1.0;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap;       // blurred variance maps: the big soft box gives wide, soft penumbrae in the photo
-const MAX_ANISO = renderer.capabilities.getMaxAnisotropy();
+const MAX_ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(30, 1, 0.6, 900);          // site: near plane close enough for the macro chapters
@@ -3757,9 +3717,9 @@ let baseFov = 30, lensNow = 1;                                      // site: the
 let qualityScale = 1, carPixelScale = 1, filmPixelScale = 1;         // site: dynamic resolution + the pressings' and the film's pixel budgets (scene_api.js)
 function resize() {
   const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
-  // pixel budget: keep the drawing buffer at or under ~6.4 MP (a 16" Retina laptop at 2x) so large high-DPI screens stay at 60 fps
-  const prBudget = Math.max(1, Math.sqrt(6.4e6 / Math.max(1, w * h)));
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 1.75 : 2, prBudget) * qualityScale * carPixelScale * filmPixelScale);
+  // pixel budget: keep the drawing buffer at or under 3 MP to avoid oversized buffers on high-DPI displays
+  const prBudget = Math.sqrt(3e6 / Math.max(1, w * h));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 1.35 : 1.5, prBudget) * qualityScale * carPixelScale * filmPixelScale);
   if (typeof siteOnResize === "function") siteOnResize();
   renderer.setSize(w, h, false);
   const aspect = w / h;
@@ -3958,7 +3918,7 @@ const carCam = new THREE.Vector3();
 const carTune = { budgetPx: 3.8e6 };
 function carResize(on) {
   const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
-  const base = Math.min(window.devicePixelRatio || 1, isSmall ? 1.75 : 2, Math.max(1, Math.sqrt(6.4e6 / Math.max(1, w * h))));
+  const base = Math.min(window.devicePixelRatio || 1, isSmall ? 1.35 : 1.5, Math.sqrt(3e6 / Math.max(1, w * h)));
   carPixelScale = on ? Math.min(1, Math.sqrt(carTune.budgetPx / Math.max(1, w * h * base * base))) : 1;
   resize(); forceFrames = Math.max(forceFrames, 2);
 }
@@ -4105,7 +4065,7 @@ function buildEdges() {
 // ---- macro depth of field: scene -> HDR target (MSAA, depth texture), two blur levels at 1/2 and 1/4 res, composite
 // by circle of confusion from linear depth. Only runs while env.dof > 0 (the macro chapter); tone mapping and the
 // output colour space are applied in the composite so the look matches the direct path.
-const dof = { rt: null, rtA: null, rtB: null, rtC: null, rtD: null, w: 0, h: 0, ok: true, samples: 4 };
+const dof = { rt: null, rtA: null, rtB: null, rtC: null, rtD: null, w: 0, h: 0, ok: true, samples: isSmall ? 0 : 2 };
 const fsVert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
 const blurMat = new THREE.ShaderMaterial({
   uniforms: { tDiffuse: { value: null }, uTexel: { value: new THREE.Vector2(1, 1) }, uDir: { value: new THREE.Vector2(1, 0) }, uRadius: { value: 1 } },
@@ -4137,7 +4097,7 @@ const compMat = new THREE.ShaderMaterial({
 const fsScene = new THREE.Scene(), fsQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), compMat), fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 fsQuad.frustumCulled = false; fsScene.add(fsQuad);
 function dofDispose() { for (const k of ['rt', 'rtA', 'rtB', 'rtC', 'rtD']) if (dof[k]) { dof[k].dispose(); dof[k] = null; } }
-const dofTune = { budgetPx: 1.6e6 };                                 // the macro frame renders at most this many pixels (see dofSetup)
+const dofTune = { budgetPx: isSmall ? 0.8e6 : 1.2e6 };                                 // the macro frame renders at most this many pixels (see dofSetup)
 function dofSetup() {
   const size = renderer.getDrawingBufferSize(new THREE.Vector2());
   // the macro close-ups put the walnut shader on every pixel: cap the depth-of-field target at a pixel budget (about a
@@ -4179,7 +4139,7 @@ siteOnResize = () => {};                                             // dofSetup
 let pixWant = 0;
 function updateFilmPix() {
   const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
-  const base = Math.min(window.devicePixelRatio || 1, isSmall ? 1.75 : 2, Math.max(1, Math.sqrt(6.4e6 / Math.max(1, w * h))));
+  const base = Math.min(window.devicePixelRatio || 1, isSmall ? 1.35 : 1.5, Math.sqrt(3e6 / Math.max(1, w * h)));
   const want = pixWant > 0 ? Math.min(1, Math.sqrt(pixWant * 1e6 / Math.max(1, w * h * base * base))) : 1;
   if (Math.abs(want - filmPixelScale) < 0.01) return;
   filmPixelScale = want; resize(); forceFrames = Math.max(forceFrames, 2);
@@ -4210,6 +4170,7 @@ const BASE_KEY = 34000, BASE_FILL = fill.intensity, BASE_RIM = rim.intensity;
 
 function frame(now) {
   requestAnimationFrame(frame);
+  if (document.hidden) { lastT = now; return; }
   const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now; lastDt = dt;
   perf.acc += dt; perf.n++;
   if (perf.acc >= 0.5) { perf.fps = perf.n / perf.acc; perf.acc = 0; perf.n = 0; }
@@ -4270,8 +4231,9 @@ function frame(now) {
   if (dust.visible) { dust.material.uniforms.uOpacity.value = dv; dust.material.uniforms.uTime.value = now / 1000; dust.material.uniforms.uPix.value = renderer.getPixelRatio(); moved = true; }
   if (updateCarousel(dt)) moved = true;
   // the deck's own life
+  const pointerChanged = pointerMoved;
   updatePlatter(dt); updateArm(dt); updateAudio(dt); updateMeter(); pickHover(false);
-  const deckLive = state.phase !== 'stopped' || state.platSpeed > 0 || knobTween || btnPress > 0 || pointerMoved;
+  const deckLive = state.phase !== 'stopped' || state.platSpeed > 0 || knobTween || btnPress > 0 || pointerChanged;
   if (goal.covered) return;
   if (!(moved || deckLive || forceFrames > 0)) return;
   if (forceFrames > 0) forceFrames--;
@@ -4288,13 +4250,13 @@ function frame(now) {
   perf.renders = (perf.renders || 0) + 1;
   // adaptive resolution: when more than ~1 frame in 8 misses 60 Hz over the last second, drop the pixel ratio a notch;
   // restore a notch after three calm seconds
-  fpsWindow.push(dt); if (fpsWindow.length > 60) fpsWindow.shift();
+  fpsWindow.push(dt); if (fpsWindow.length > 45) fpsWindow.shift();
   adaptT += dt;
-  if (adaptive && adaptT > 1.0 && fpsWindow.length >= 60) {
+  if (adaptive && adaptT > 1.0 && fpsWindow.length >= 30) {
     adaptT = 0;
     const slow = fpsWindow.filter(x => x > 0.0205).length / fpsWindow.length;
-    if (slow > 0.12 && qualityScale > 0.7) { qualityScale = Math.max(0.7, qualityScale - 0.15); resize(); forceFrames = 2; calmT = 0; }
-    else if (slow < 0.02) { calmT++; if (calmT >= 3 && qualityScale < 1) { qualityScale = Math.min(1, qualityScale + 0.15); resize(); forceFrames = 2; calmT = 0; } }
+    if (slow > 0.12 && qualityScale > 0.55) { qualityScale = Math.max(0.55, qualityScale - 0.1); resize(); forceFrames = 2; calmT = 0; }
+    else if (slow < 0.02) { calmT++; if (calmT >= 6 && qualityScale < 1) { qualityScale = Math.min(1, qualityScale + 0.1); resize(); forceFrames = 2; calmT = 0; } }
     else calmT = 0;
   }
 }
@@ -4432,15 +4394,19 @@ window.TT = {
 };
 
 // ---- boot -------------------------------------------------------------------------------------------------------
+const yieldToPage = () => new Promise(resolve => requestAnimationFrame(resolve));
 async function start() {
+  await yieldToPage();
   await loadWood();
   if (SITE.onProgress) SITE.onProgress(0.88);
   buildPlinth();
+  await yieldToPage();
   buildExplode();
+  await yieldToPage();
   resize();
   armYaw.rotation.y = state.armYaw; armPitch.rotation.z = 0;
   updateUI();
-  prerenderMusic();
+
   // the pressings' labels are printed by the page (fonts + art); build the row with them, or with blanks if they are late
   try {
     const labels = await Promise.race([SITE.labelsReady || Promise.resolve(null), new Promise(r => setTimeout(() => r(null), 6000))]);
@@ -4449,11 +4415,12 @@ async function start() {
   } catch (e) { console.warn('pressings failed:', e); }
   if (SITE.frame) SITE.frame(0, performance.now());
   snapNext = true;
-  renderer.compile(scene, camera);
+  await renderer.compileAsync(scene, camera);
   if (SITE.onProgress) SITE.onProgress(0.93);
   // warm the later chapters while the loader still covers the page: the blueprint's edge batches and the off-screen
   // shader variants the depth-of-field path needs (every material compiles again for a render target)
   try {
+    await yieldToPage();
     buildEdges();
     for (const o of edgeObjs) o.visible = true;                      // compile the clipped line program now, not mid-scroll
     renderer.compile(scene, camera);
@@ -4463,7 +4430,7 @@ async function start() {
     if (carousel.built) {
       carousel.group.visible = true; for (const it of carousel.items) it.slot.visible = true;
       renderer.compile(scene, camera);
-      for (const it of carousel.items) renderer.initTexture(it.tex);
+      for (const it of carousel.items) { renderer.initTexture(it.tex); await yieldToPage(); }
       carousel.group.visible = false;
     }
   } catch (e) { console.warn('pressings warm-up failed:', e); }
@@ -4471,8 +4438,12 @@ async function start() {
     if (dofSetup()) { renderer.setRenderTarget(dof.rt); renderer.compile(scene, camera); renderer.render(scene, camera); renderer.setRenderTarget(null); renderDof(0.001); }
   } catch (e) { console.warn('dof warm-up failed:', e); dof.ok = false; }
   if (SITE.onProgress) SITE.onProgress(0.97);
-  requestAnimationFrame(frame);
+  await yieldToPage();
+  lastT = performance.now();
+  frame(lastT); // Paint the prepared scene once underneath the cover.
   requestAnimationFrame(() => { if (SITE.onProgress) SITE.onProgress(1); if (SITE.onReady) SITE.onReady(window.TT); });
+  // Audio preparation begins after the entrance, instead of competing with GPU warm-up.
+  setTimeout(prerenderMusic, 2100);
 }
 start().catch(err => { console.error(err); if (SITE.onError) SITE.onError(err); });
 
@@ -4502,7 +4473,7 @@ const SETTINGS = {
 };
 const FIT_ASPECT = { portrait: 0.75, square: 1, landscape: 4 / 3 };
 const TAPS = 12;
-const PIXEL_BUDGET = 4.5e6;
+const PIXEL_BUDGET = 2.4e6;
 const INTRO_DURATION = { rise: 2.1, bloom: 1.6, spin: 2.2, deal: 1.5, fade: 0.35 };
 const SCROLL_SPAN = 0.88;            // the share of the pinned scroll that travels the strip; the rest rests on the last deck
 
@@ -4635,7 +4606,7 @@ void main() {
 `;
 
 function createFlexCarousel(container, list, s) {
-  const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: true, premultipliedAlpha: true, antialias: false, depth: false });
+  const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 1.5), alpha: true, premultipliedAlpha: true, antialias: false, depth: false });
   const gl = renderer.gl;
   if (!renderer.isWebgl2) { gl.getExtension('WEBGL_lose_context')?.loseContext(); return null; }
   gl.clearColor(0, 0, 0, 0);
@@ -4773,7 +4744,7 @@ function createFlexCarousel(container, list, s) {
   };
   const resize = () => {
     width = Math.max(1, container.clientWidth); height = Math.max(1, container.clientHeight);
-    renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
+    renderer.dpr = Math.min(window.devicePixelRatio || 1, 1.5, Math.sqrt(PIXEL_BUDGET / (width * height)));
     renderer.setSize(width, height);
     target.setSize(Math.max(2, Math.round(width * renderer.dpr)), Math.max(2, Math.round(height * renderer.dpr)));
     lensUniforms.tScene.value = target.texture;
@@ -4782,6 +4753,7 @@ function createFlexCarousel(container, list, s) {
 
   const frame = now => {
     raf = 0;
+    if (!visible || document.hidden) return;
     const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000)); last = now;
     const m = metrics(), n = slots.length;
     let animating = false;
@@ -4901,10 +4873,10 @@ function createFlexCarousel(container, list, s) {
       const hit = instances.find(inst => pointer.x >= inst.x0 && pointer.x <= inst.x1 && pointer.y >= inst.y0 && pointer.y <= inst.y1);
       if (focus.target > 0) nextHover = 'close'; else if (hit) nextHover = 'open';
     }
-    if (nextHover !== hover) { hover = nextHover; if (hover) container.setAttribute('data-hover', hover); else container.removeAttribute('data-hover'); container.dataset.cursor = hover === 'close' ? 'Close' : hover === 'open' ? 'Look' : 'Drag'; }
+    if (nextHover !== hover) { hover = nextHover; if (hover) container.setAttribute('data-hover', hover); else container.removeAttribute('data-hover'); }
     if (visible && (animating || waiting || dirty || pointer.down)) raf = requestAnimationFrame(frame);
   };
-  const start = () => { if (raf || !visible) return; last = performance.now(); raf = requestAnimationFrame(frame); };
+  const start = () => { if (raf || !visible || document.hidden) return; last = performance.now(); raf = requestAnimationFrame(frame); };
   const localPoint = e => { const rect = container.getBoundingClientRect(); return [e.clientX - rect.left, e.clientY - rect.top]; };
 
   container.addEventListener('pointerdown', e => {
@@ -4994,25 +4966,28 @@ function createFlexCarousel(container, list, s) {
 }
 
 const el = document.getElementById('rangeFc');
-window.__range = el ? createFlexCarousel(el, ITEMS, SETTINGS) : null;
+window.__range = null;
+if (el) {
+  const prepareRange = () => {
+    if (window.__range) return;
+    try { window.__range = createFlexCarousel(el, ITEMS, SETTINGS); }
+    catch (err) { console.warn('Range view unavailable:', err); }
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); prepareRange(); }
+    }, { rootMargin: '1200px 0px' });
+    observer.observe(el);
+  } else prepareRange();
+}
 
 </script>
 <script>
-// Pointer light and a brief tactile pulse; original button actions stay in place.
+// A brief tactile pulse; controls stay fixed under the pointer.
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.rd-control').forEach(el => {
     let release;
-    if (!reducedMotion) {
-      el.addEventListener('pointermove', e => {
-        const r = el.getBoundingClientRect();
-        el.style.setProperty('--rdx', ((e.clientX - r.left) / r.width - .5).toFixed(2));
-        el.style.setProperty('--rdy', ((e.clientY - r.top) / r.height - .5).toFixed(2));
-      });
-      el.addEventListener('pointerleave', () => {
-        el.style.setProperty('--rdx', '0'); el.style.setProperty('--rdy', '0');
-      });
-    }
     el.addEventListener('click', () => {
       clearTimeout(release);
       el.classList.remove('rd-fired');
