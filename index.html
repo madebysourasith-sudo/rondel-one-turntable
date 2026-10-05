@@ -712,7 +712,7 @@ requestAnimationFrame(() => { window.RONDEL_LOADER_STARTED = performance.now(); 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// Original Amber Halftone renderer from ThreeUI's Code tab. Default colors, grid, size, opacity and timing.
+// ThreeUI Amber Halftone: larger screen-sized points and a denser grid, following Tideform's visual balance.
 // https://threeui.com/backgrounds/predictive-arc/amber-halftone
 const initHalftoneWebGL = () => {
     const canvas = document.getElementById('webgl-halftone');
@@ -739,13 +739,13 @@ const initHalftoneWebGL = () => {
     window.addEventListener('resize', resize);
     resize();
     camera.position.z = 1;
-    const gridSize = 20;
+    const gridSize = 40;
     const geometry = new THREE.BufferGeometry();
     const positions = [];
     const scales = [];
     for (let x = -gridSize; x <= gridSize; x++) {
         for (let y = -gridSize; y <= gridSize; y++) {
-            positions.push(x * 0.15, y * 0.15, 0);
+            positions.push(x * 0.10, y * 0.10, 0);
             scales.push(1);
         }
     }
@@ -754,6 +754,7 @@ const initHalftoneWebGL = () => {
     const material = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 },
+            pointPixelRatio: { value: renderer.getPixelRatio() },
             color1: { value: new THREE.Color(0xFBBF24) },
             color2: { value: new THREE.Color(0xFFFFFF) }
         },
@@ -762,12 +763,13 @@ const initHalftoneWebGL = () => {
             varying vec2 vUv;
             varying float vScale;
             uniform float time;
+            uniform float pointPixelRatio;
             void main() {
                 vUv = position.xy;
                 float dist = length(position.xy);
                 float animatedScale = scale * (sin(dist * 6.0 - time * 2.5) * 0.5 + 0.5);
                 vScale = animatedScale;
-                gl_PointSize = animatedScale * 5.0;
+                gl_PointSize = animatedScale * 5.5 * pointPixelRatio;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         `,
@@ -780,7 +782,7 @@ const initHalftoneWebGL = () => {
                 vec2 coord = gl_PointCoord - vec2(0.5);
                 if(length(coord) > 0.5) discard;
                 vec3 finalColor = mix(color2, color1, (vUv.y + 1.0) * 0.5);
-                gl_FragColor = vec4(finalColor, vScale * 0.9);
+                gl_FragColor = vec4(finalColor, vScale * 0.78);
             }
         `,
         transparent: true
