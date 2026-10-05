@@ -65,8 +65,10 @@ sup{line-height:0}
 .l.nowrap>span{white-space:nowrap}
 
 /* ---- fixed layers -------------------------------------------------------------------------------------------- */
-#stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg)}
-#ground{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 68%,#1a120c 0%,#0a0806 48%,#000 78%);opacity:var(--ground,1)}
+#ambientField{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+body.ambient-on #ambientField{opacity:.72}
+#stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:transparent}
+#ground{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 68%,#1a120c99 0%,#0a080633 48%,transparent 78%);opacity:var(--ground,1)}
 #pool{position:absolute;inset:0;background:radial-gradient(36% 26% at 50% 64%,rgba(255,190,120,.22) 0%,rgba(255,170,100,.07) 46%,rgba(255,170,100,0) 72%);opacity:var(--pool,1);mix-blend-mode:screen}
 #under{position:absolute;inset:0;overflow:hidden}
 .uw{position:absolute;left:50%;top:50%;font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.85;white-space:nowrap;color:var(--ink);opacity:var(--uo,0);transform:translate3d(calc(-50% + var(--ux,0px)),calc(-50% + var(--uy,0px) + var(--st,0px)),0) scale(var(--us,1));will-change:transform,opacity;letter-spacing:.01em}
@@ -74,7 +76,7 @@ sup{line-height:0}
 .uw.num .u{font-size:.32em;margin-left:.08em;color:var(--ink-2);vertical-align:baseline}
 .uw.line{left:0;transform:translate3d(var(--ux,0px),calc(-50% + var(--st,0px)),0)}
 .uw.mark{color:var(--e4)}
-#fade{position:absolute;inset:0;background:#000;opacity:var(--fade,0);pointer-events:none}
+#fade{display:none}
 #c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
 #grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
 #tip{position:fixed;z-index:30;opacity:0;pointer-events:none;font-size:1px;color:transparent}
@@ -127,7 +129,7 @@ body.ready #rail{opacity:1}
 .stage a,.stage button,.stage input,.stage .pill{pointer-events:auto}
 .ch[data-opaque] .stage{pointer-events:auto}
 .flow{position:relative;pointer-events:auto}
-.ch[data-opaque] .stage,.flow{background:var(--bg)}
+.ch[data-opaque] .stage,.flow{background:rgba(0,0,0,.12)}
 .side-k{position:absolute;left:max(8px,calc(var(--gx) - 38px));top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;color:var(--ink-3)}   /* clear of every content column (which starts at --gx) */
 .sA{opacity:var(--a1,1)}.sB{opacity:var(--a2,0)}
 
@@ -264,7 +266,7 @@ body.ready #rail{opacity:1}
 .sel .model[aria-pressed="true"]{border-color:var(--amber);background:rgba(20,16,12,.8)}
 
 /* footer (Rains structure, Rondel dress): lifted near-black ground, warm ink, the wordmark fitted edge to edge */
-#foot{position:relative;z-index:3;background:var(--e1);border-top:1px solid var(--line);padding:clamp(48px,7vh,80px) var(--gx) 0;overflow:hidden;pointer-events:auto}
+#foot{position:relative;z-index:3;background:rgba(16,15,14,.48);border-top:1px solid var(--line);padding:clamp(48px,7vh,80px) var(--gx) 0;overflow:hidden;pointer-events:auto}
 .ft-top{display:grid;grid-template-columns:2.05fr 1fr 1fr 1fr 1fr;gap:clamp(20px,3vw,48px)}
 .ft-promise{font:600 clamp(19px,1.55vw,25px)/1.08 var(--sans);letter-spacing:-.01em;color:var(--ink)}
 .ft-news-h{margin-top:36px;font:600 14px/1.3 var(--sans);color:var(--ink)}
@@ -319,8 +321,6 @@ body.ready #rail{opacity:1}
 #loader{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;background:#000;color:var(--ink);opacity:1;transition:opacity 1s ease}
 #loader.leaving{opacity:0;pointer-events:none}
 #loader.hide{visibility:hidden}
-#loaderField{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.62}
-#loader::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 240px 230px at 50% 50%,#000c 0%,#0008 55%,transparent 100%)}
 .ld-assembly{position:relative;z-index:1;width:clamp(180px,27vw,230px);aspect-ratio:1;border-radius:50%;padding:5px;background:conic-gradient(from 25deg,#252421,#85837d 17%,#353431 29%,#131312 45%,#aaa79f 64%,#373631 79%,#252421);box-shadow:0 14px 42px #000,inset 0 1px 1px #ece6d050;animation:ld-arrive 1s var(--ease) both;transition:transform 1s var(--ease)}
 .ld-record{position:relative;width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle at center,#0c0d0d 0 1px,#252625 1px 1.5px,#0b0c0c 1.5px 2.4px);box-shadow:inset 0 0 0 2px #050505,inset 0 0 0 3px #ffffff10;animation:ld-turn 1.8s linear infinite;will-change:transform}
 .ld-label{position:absolute;inset:33.5%;border-radius:50%;overflow:hidden;background:#d79958;box-shadow:0 0 0 1px #3c2718,inset 0 0 0 3px #d7a472}
@@ -338,7 +338,7 @@ body.ready #rail{opacity:1}
 #loader.error #loaderText{max-width:32ch;letter-spacing:0}
 @keyframes ld-turn{to{transform:rotate(360deg)}}
 @keyframes ld-arrive{from{opacity:0;scale:.94}to{opacity:1;scale:1}}
-@media(prefers-reduced-motion:reduce){#loader,.ld-assembly,.ld-copy{transition:none}.ld-assembly,.ld-record{animation:none}.ld-record{will-change:auto}#loader.leaving .ld-assembly{transform:none}}
+@media(prefers-reduced-motion:reduce){#ambientField{transition:none}#loader,.ld-assembly,.ld-copy{transition:none}.ld-assembly,.ld-record{animation:none}.ld-record{will-change:auto}#loader.leaving .ld-assembly{transform:none}}
 
 /* ---- phones -------------------------------------------------------------------------------------------------- */
 @media (max-width:760px){
@@ -498,6 +498,7 @@ body.ready #rail{opacity:1}
 </style>
 </head>
 <body>
+<canvas id="ambientField" aria-hidden="true"></canvas>
 
 <!-- the one WebGL canvas: fixed, behind every section. #under holds the display type that sits BEHIND the deck -->
 <div id="stage" aria-hidden="false">
@@ -692,7 +693,6 @@ body.ready #rail{opacity:1}
 </main>
 
 <div id="loader" role="status" aria-live="polite" aria-label="Loading Rondel One">
-  <canvas id="loaderField" aria-hidden="true"></canvas>
   <div class="ld-assembly" aria-hidden="true">
     <div class="ld-record"><div class="ld-label"><img src="https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-14.jpg" alt="" decoding="async" fetchpriority="high" width="256" height="256"></div></div>
     <div class="ld-sheen"></div><i class="ld-spindle"></i>
@@ -708,10 +708,10 @@ body.ready #rail{opacity:1}
 // Amber Halftone radial wave from ThreeUI, adapted to Canvas 2D to avoid another WebGL context.
 // https://threeui.com/backgrounds/predictive-arc/amber-halftone
 (() => {
-  const cover = document.getElementById('loader'), canvas = document.getElementById('loaderField');
+  const canvas = document.getElementById('ambientField');
   const ctx = canvas.getContext('2d', { alpha: true });
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  let width = 0, height = 0, raf = 0, last = 0, time = 0, stopped = false;
+  let width = 0, height = 0, raf = 0, last = 0, time = 0, enabled = false;
   window.RONDEL_LOADER_STARTED = performance.now();
   function draw() {
     if (!ctx) return;
@@ -735,7 +735,7 @@ body.ready #rail{opacity:1}
   }
   function tick(now) {
     raf = 0;
-    if (stopped || document.hidden || motion.matches) return;
+    if (!enabled || document.hidden || motion.matches) return;
     if (!last || now - last >= 32) {
       // One fifth of the reference speed; cap time steps when a tab resumes.
       time += last ? Math.min((now - last) / 1000, .1) * .2 : 0;
@@ -743,14 +743,13 @@ body.ready #rail{opacity:1}
     }
     raf = requestAnimationFrame(tick);
   }
-  function resume() { last = 0;if (!stopped && !raf && !document.hidden && !motion.matches) raf = requestAnimationFrame(tick); }
+  function resume() { last = 0;if (enabled && !raf && !document.hidden && !motion.matches) raf = requestAnimationFrame(tick); }
   function visibility() { if (document.hidden) { cancelAnimationFrame(raf);raf = 0; } else resume(); }
-  window.RONDEL_STOP_LOADER_FIELD = () => {
-    stopped = true;cancelAnimationFrame(raf);raf = 0;
-    removeEventListener('resize',resize);document.removeEventListener('visibilitychange',visibility);motion.removeEventListener('change',visibility);
+  window.RONDEL_START_AMBIENT_FIELD = () => {
+    enabled = true;document.body.classList.add('ambient-on');draw();resume();
   };
   addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',visibility);motion.addEventListener('change',visibility);
-  resize();requestAnimationFrame(() => { window.RONDEL_LOADER_STARTED = performance.now();resume(); });
+  resize();requestAnimationFrame(() => { window.RONDEL_LOADER_STARTED = performance.now(); });
 })();
 </script>
 
@@ -792,7 +791,7 @@ const byId = {}; for (const s of sections) byId[s.id] = s;
 for (const s of sections) if (s.el.classList.contains('ch')) s.el.style.setProperty('--len', s.len);
 
 const dom = {
-  ground: $('#ground'), fade: $('#fade'), outHead: $('.out-head'), outFinish: $('#outFinish'), pool: $('#pool'), cue: $('#cue'), heroSound: $('#heroSound'), nav: $('#nav'), navLinks: $$('#nav [data-act]'), scrim: $('#scrim'),
+  sceneLayer: $('#stage'), ground: $('#ground'), fade: $('#fade'), outHead: $('.out-head'), outFinish: $('#outFinish'), pool: $('#pool'), cue: $('#cue'), heroSound: $('#heroSound'), nav: $('#nav'), navLinks: $$('#nav [data-act]'), scrim: $('#scrim'),
   railDot: $('#railDot'), railAct: $('#railAct'), railNum: $('#railNum'), barFill: $('#barFill'),
   uwHero: $('#uwHero'), uwSlide: $('#uwSlide'), uwModels: $('#uwModels'),
   filmHead1: $('#filmHead1'), filmHead2: $('#filmHead2'), filmCap: $('#filmCap'), filmCapNum: $('#filmCapNum'), filmCapTxt: $('#filmCapTxt'), filmCapX: $('#filmCapX'), filmSound: $('#filmSound'),
@@ -1474,7 +1473,7 @@ function frame(dt, now) {
   if (bootReady && !intro.done) { if (!intro.t0) intro.t0 = now; intro.k = clamp((now - intro.t0) / 2400, 0, 1); if (intro.k >= 1) intro.done = true; }
   const y = window.scrollY || window.pageYOffset || 0;
   const visible = [];
-  let coveredTop = false, coveredBottom = false, center = null;
+  let coveredTop = false, coveredBottom = false, center = null, opaqueCoverage = 0;
   usedUnder.clear();
   for (const s of sections) {
     const top = s.top - y, bottom = top + s.height;
@@ -1484,6 +1483,7 @@ function frame(dt, now) {
     s.e = s.el.classList.contains('ch') ? clamp(1 - top / vh, 0, 1) : clamp((vh - top) / (vh * 0.8), 0, 1);
     s.st = top > 0 ? top : Math.min(0, bottom - vh);
     if (isVisible) visible.push(s);
+    if (s.opaque && isVisible) opaqueCoverage = Math.max(opaqueCoverage, clamp((Math.min(bottom,vh)-Math.max(top,0))/vh,0,1));
     if (top <= 0 && bottom > 0) coveredTop = s.opaque;
     if (top < vh && bottom >= vh) coveredBottom = s.opaque;
     if (top <= vh / 2 && bottom > vh / 2) center = s;
@@ -1501,6 +1501,8 @@ function frame(dt, now) {
   tickRevs(dt);
   // the fade to black at the end of the outro (it stays down under the footer, lifts when scrolling back up)
   { const o = byId.outro, f = o.top - y > 0 ? 0 : sm(0.68, 0.94, o.p); if (Math.abs(f - (frame.fade ?? -1)) > 0.001) { frame.fade = f; setv(dom.fade, '--fade', f); } }
+  // Fade the product layer as the range enters; the halftone remains behind every chapter.
+  setv(dom.sceneLayer, 'opacity', 1 - Math.max(opaqueCoverage, frame.fade || 0));
   // the nav scrim: off in the hero, in once the hero starts to leave
   { const sc = sm(0.3, 0.75, byId.hero.p); if (Math.abs(sc - lastScrim) > 0.002) { setv(dom.scrim, '--scrim', sc); lastScrim = sc; } }
   for (const id in UNDER) { const u = UNDER[id]; if (!usedUnder.has(u) && u.style.getPropertyValue('--uo') !== '0') setv(u, '--uo', 0); }
@@ -1592,7 +1594,7 @@ function ready() {
   intro.t0 = performance.now() + (reduced ? 0 : 600); intro.k = reduced ? 1 : 0; intro.done = reduced;
   if (!dom.loader.classList.contains("error")) dom.loaderText.textContent = "Ready to play";
   body.classList.add('ready');
-  const finish = () => { dom.loader.classList.add('hide'); window.RONDEL_STOP_LOADER_FIELD?.(); if (window.TT) window.TT.render(); };
+  const finish = () => { dom.loader.classList.add('hide'); window.RONDEL_START_AMBIENT_FIELD?.(); if (window.TT) window.TT.render(); };
   if (lenis) lenis.start();
   dom.loader.classList.add('leaving');
   if (reduced) finish(); else setTimeout(finish, 1020);
