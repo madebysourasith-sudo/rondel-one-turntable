@@ -65,8 +65,10 @@ sup{line-height:0}
 .l.nowrap>span{white-space:nowrap}
 
 /* ---- fixed layers -------------------------------------------------------------------------------------------- */
-#ambientField{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
-body.ambient-on #ambientField{opacity:.72}
+#ambientBackground{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden}
+body.ambient-on #ambientBackground{visibility:visible}
+#webgl-halftone{display:block;width:100%;height:100%}
+#ground,#pool,#grain{display:none}
 #stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:transparent}
 #ground{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 68%,#1a120c99 0%,#0a080633 48%,transparent 78%);opacity:var(--ground,1)}
 #pool{position:absolute;inset:0;background:radial-gradient(36% 26% at 50% 64%,rgba(255,190,120,.22) 0%,rgba(255,170,100,.07) 46%,rgba(255,170,100,0) 72%);opacity:var(--pool,1);mix-blend-mode:screen}
@@ -129,7 +131,7 @@ body.ready #rail{opacity:1}
 .stage a,.stage button,.stage input,.stage .pill{pointer-events:auto}
 .ch[data-opaque] .stage{pointer-events:auto}
 .flow{position:relative;pointer-events:auto}
-.ch[data-opaque] .stage,.flow{background:rgba(0,0,0,.12)}
+.ch[data-opaque] .stage,.flow{background:transparent}
 .side-k{position:absolute;left:max(8px,calc(var(--gx) - 38px));top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;color:var(--ink-3)}   /* clear of every content column (which starts at --gx) */
 .sA{opacity:var(--a1,1)}.sB{opacity:var(--a2,0)}
 
@@ -266,7 +268,7 @@ body.ready #rail{opacity:1}
 .sel .model[aria-pressed="true"]{border-color:var(--amber);background:rgba(20,16,12,.8)}
 
 /* footer (Rains structure, Rondel dress): lifted near-black ground, warm ink, the wordmark fitted edge to edge */
-#foot{position:relative;z-index:3;background:rgba(16,15,14,.48);border-top:1px solid var(--line);padding:clamp(48px,7vh,80px) var(--gx) 0;overflow:hidden;pointer-events:auto}
+#foot{position:relative;z-index:3;background:transparent;border-top:1px solid var(--line);padding:clamp(48px,7vh,80px) var(--gx) 0;overflow:hidden;pointer-events:auto}
 .ft-top{display:grid;grid-template-columns:2.05fr 1fr 1fr 1fr 1fr;gap:clamp(20px,3vw,48px)}
 .ft-promise{font:600 clamp(19px,1.55vw,25px)/1.08 var(--sans);letter-spacing:-.01em;color:var(--ink)}
 .ft-news-h{margin-top:36px;font:600 14px/1.3 var(--sans);color:var(--ink)}
@@ -338,7 +340,7 @@ body.ready #rail{opacity:1}
 #loader.error #loaderText{max-width:32ch;letter-spacing:0}
 @keyframes ld-turn{to{transform:rotate(360deg)}}
 @keyframes ld-arrive{from{opacity:0;scale:.94}to{opacity:1;scale:1}}
-@media(prefers-reduced-motion:reduce){#ambientField{transition:none}#loader,.ld-assembly,.ld-copy{transition:none}.ld-assembly,.ld-record{animation:none}.ld-record{will-change:auto}#loader.leaving .ld-assembly{transform:none}}
+@media(prefers-reduced-motion:reduce){#ambientBackground{transition:none}#loader,.ld-assembly,.ld-copy{transition:none}.ld-assembly,.ld-record{animation:none}.ld-record{will-change:auto}#loader.leaving .ld-assembly{transform:none}}
 
 /* ---- phones -------------------------------------------------------------------------------------------------- */
 @media (max-width:760px){
@@ -498,7 +500,7 @@ body.ready #rail{opacity:1}
 </style>
 </head>
 <body>
-<canvas id="ambientField" aria-hidden="true"></canvas>
+<div id="ambientBackground" aria-hidden="true"><canvas id="webgl-halftone"></canvas></div>
 
 <!-- the one WebGL canvas: fixed, behind every section. #under holds the display type that sits BEHIND the deck -->
 <div id="stage" aria-hidden="false">
@@ -705,52 +707,98 @@ body.ready #rail{opacity:1}
 </div>
 
 <script>
-// Amber Halftone radial wave from ThreeUI, adapted to Canvas 2D to avoid another WebGL context.
+window.RONDEL_LOADER_STARTED = performance.now();
+requestAnimationFrame(() => { window.RONDEL_LOADER_STARTED = performance.now(); });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Original Amber Halftone renderer from ThreeUI's Code tab. Default colors, grid, size, opacity and timing.
 // https://threeui.com/backgrounds/predictive-arc/amber-halftone
-(() => {
-  const canvas = document.getElementById('ambientField');
-  const ctx = canvas.getContext('2d', { alpha: true });
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  let width = 0, height = 0, raf = 0, last = 0, time = 0, enabled = false;
-  window.RONDEL_LOADER_STARTED = performance.now();
-  function draw() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    const spacing = Math.max(22, height * .075), unit = height / 2;
-    const cols = Math.ceil(width / spacing / 2), rows = Math.ceil(height / spacing / 2);
-    for (let x = -cols; x <= cols; x++) for (let y = -rows; y <= rows; y++) {
-      const px = x * spacing, py = y * spacing;
-      const wave = Math.sin(Math.hypot(px, py) / unit * 6 - time * 2.5) * .5 + .5;
-      if (wave < .035) continue;
-      const amber = Math.max(0, Math.min(1, .5 - py / height));
-      ctx.fillStyle = `rgba(${Math.round(243 - 13 * amber)},${Math.round(237 - 72 * amber)},${Math.round(220 - 135 * amber)},${wave * .9})`;
-      ctx.beginPath();ctx.arc(width / 2 + px, height / 2 + py, wave * 2, 0, Math.PI * 2);ctx.fill();
+const initHalftoneWebGL = () => {
+    const canvas = document.getElementById('webgl-halftone');
+    if(!canvas) return;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x0A0A0A, 1);
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    const resize = () => {
+        const parent = canvas.parentElement;
+        const width = Math.max(1, (parent && parent.clientWidth) || window.innerWidth || canvas.clientWidth || 1);
+        const height = Math.max(1, (parent && parent.clientHeight) || window.innerHeight || canvas.clientHeight || 1);
+        renderer.setSize(width, height, false);
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        const aspect = width / height;
+        camera.left = -aspect;
+        camera.right = aspect;
+        camera.bottom = -1;
+        camera.top = 1;
+        camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', resize);
+    resize();
+    camera.position.z = 1;
+    const gridSize = 20;
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+    const scales = [];
+    for (let x = -gridSize; x <= gridSize; x++) {
+        for (let y = -gridSize; y <= gridSize; y++) {
+            positions.push(x * 0.15, y * 0.15, 0);
+            scales.push(1);
+        }
     }
-  }
-  function resize() {
-    width = innerWidth; height = innerHeight;
-    const dpr = Math.min(devicePixelRatio || 1, 1.5);
-    canvas.width = Math.round(width * dpr);canvas.height = Math.round(height * dpr);
-    if (ctx) ctx.setTransform(dpr,0,0,dpr,0,0); draw();
-  }
-  function tick(now) {
-    raf = 0;
-    if (!enabled || document.hidden || motion.matches) return;
-    if (!last || now - last >= 32) {
-      // One fifth of the reference speed; cap time steps when a tab resumes.
-      time += last ? Math.min((now - last) / 1000, .1) * .2 : 0;
-      last = now;draw();
-    }
-    raf = requestAnimationFrame(tick);
-  }
-  function resume() { last = 0;if (enabled && !raf && !document.hidden && !motion.matches) raf = requestAnimationFrame(tick); }
-  function visibility() { if (document.hidden) { cancelAnimationFrame(raf);raf = 0; } else resume(); }
-  window.RONDEL_START_AMBIENT_FIELD = () => {
-    enabled = true;document.body.classList.add('ambient-on');draw();resume();
-  };
-  addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',visibility);motion.addEventListener('change',visibility);
-  resize();requestAnimationFrame(() => { window.RONDEL_LOADER_STARTED = performance.now(); });
-})();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('scale', new THREE.Float32BufferAttribute(scales, 1));
+    const material = new THREE.ShaderMaterial({
+        uniforms: {
+            time: { value: 0 },
+            color1: { value: new THREE.Color(0xFBBF24) },
+            color2: { value: new THREE.Color(0xFFFFFF) }
+        },
+        vertexShader: `
+            attribute float scale;
+            varying vec2 vUv;
+            varying float vScale;
+            uniform float time;
+            void main() {
+                vUv = position.xy;
+                float dist = length(position.xy);
+                float animatedScale = scale * (sin(dist * 6.0 - time * 2.5) * 0.5 + 0.5);
+                vScale = animatedScale;
+                gl_PointSize = animatedScale * 5.0;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 color1;
+            uniform vec3 color2;
+            varying vec2 vUv;
+            varying float vScale;
+            void main() {
+                vec2 coord = gl_PointCoord - vec2(0.5);
+                if(length(coord) > 0.5) discard;
+                vec3 finalColor = mix(color2, color1, (vUv.y + 1.0) * 0.5);
+                gl_FragColor = vec4(finalColor, vScale * 0.9);
+            }
+        `,
+        transparent: true
+    });
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+    const clock = new THREE.Clock();
+    const animate = () => {
+        requestAnimationFrame(animate);
+        material.uniforms.time.value = clock.getElapsedTime();
+        renderer.render(scene, camera);
+    };
+    animate();
+};
+window.RONDEL_START_AMBIENT_FIELD = () => {
+    document.body.classList.add('ambient-on');
+    initHalftoneWebGL();
+};
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
