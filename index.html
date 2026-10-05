@@ -315,18 +315,28 @@ body.ready #rail{opacity:1}
 .out-head{position:absolute;left:var(--gx);top:calc(var(--gy) + 70px);opacity:var(--oo,1)}
 .out-head .k{margin-bottom:12px;color:var(--amber)}
 
-/* Loading progress stays visible while textures and GPU programs prepare. */
-#loader{position:fixed;inset:0;z-index:50;display:grid;place-content:center;gap:28px;background:#000;color:var(--ink);opacity:1;transition:opacity .5s ease}
+/* The record itself is the loading motif: 33 1/3 rpm, the original label and machined platter. */
+#loader{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;background:#000;color:var(--ink);opacity:1;transition:opacity .5s ease}
 #loader.leaving{opacity:0;pointer-events:none}
 #loader.hide{visibility:hidden}
-.loader-brand{display:flex;align-items:center;justify-content:center;gap:14px}
-.loader-brand svg{width:38px;height:38px}
-.loader-brand span{font:600 19px/1 var(--sans);letter-spacing:.24em}
-.loader-track{position:relative;width:192px;height:1px;background:var(--line)}
-#loaderBar{display:block;height:1px;background:var(--amber);transform:scaleX(var(--load,0));transform-origin:left;transition:transform .25s ease}
-#loaderText{margin:0;font:400 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);text-align:center}
-#loader.error #loaderText{max-width:32ch;line-height:1.6;text-transform:none;letter-spacing:.02em}
-@media(prefers-reduced-motion:reduce){#loader,#loaderBar{transition:none}}
+.ld-assembly{position:relative;width:clamp(180px,27vw,230px);aspect-ratio:1;border-radius:50%;padding:5px;background:conic-gradient(from 25deg,#252421,#85837d 17%,#353431 29%,#131312 45%,#aaa79f 64%,#373631 79%,#252421);box-shadow:0 14px 42px #000,inset 0 1px 1px #ece6d050;animation:ld-arrive .65s var(--ease) both;transition:transform .5s var(--ease)}
+.ld-record{position:relative;width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle at center,#0c0d0d 0 1px,#252625 1px 1.5px,#0b0c0c 1.5px 2.4px);box-shadow:inset 0 0 0 2px #050505,inset 0 0 0 3px #ffffff10;animation:ld-turn 1.8s linear infinite;will-change:transform}
+.ld-label{position:absolute;inset:33.5%;border-radius:50%;overflow:hidden;background:#d79958;box-shadow:0 0 0 1px #3c2718,inset 0 0 0 3px #d7a472}
+.ld-label img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ld-sheen{position:absolute;inset:5px;z-index:2;border-radius:50%;pointer-events:none;background:conic-gradient(from 12deg,transparent 0 10%,#fff9df21 17%,#fff9df07 22%,transparent 28% 57%,#fff9df24 65%,transparent 73%);-webkit-mask:radial-gradient(circle,transparent 0 23%,#000 24%);mask:radial-gradient(circle,transparent 0 23%,#000 24%)}
+.ld-spindle{position:absolute;z-index:3;left:50%;top:50%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:linear-gradient(110deg,#44433f,#e0ddd3 45%,#5f5d55);box-shadow:0 1px 2px #000}
+.ld-copy{width:230px;max-width:80vw;text-align:center;transition:opacity .3s}
+.ld-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font:400 9px/1 var(--mono);letter-spacing:.1em;color:var(--ink-3)}
+.ld-meta span:nth-child(2){color:var(--amber);font-variant-numeric:tabular-nums;min-width:4ch}
+.ld-title{margin:0;font:400 26px/1.1 var(--display);letter-spacing:.03em}
+#loaderText{margin:12px 0 0;font:400 10px/1.5 var(--mono);letter-spacing:.07em;color:var(--ink-3);text-align:center}
+#loader.leaving .ld-assembly{transform:translateY(8px) scale(.97)}
+#loader.hide .ld-record{animation:none;will-change:auto}
+#loader.error .ld-record{animation-play-state:paused}
+#loader.error #loaderText{max-width:32ch;letter-spacing:0}
+@keyframes ld-turn{to{transform:rotate(360deg)}}
+@keyframes ld-arrive{from{opacity:0;scale:.94}to{opacity:1;scale:1}}
+@media(prefers-reduced-motion:reduce){#loader,.ld-assembly,.ld-copy{transition:none}.ld-assembly,.ld-record{animation:none}.ld-record{will-change:auto}#loader.leaving .ld-assembly{transform:none}}
 
 /* ---- phones -------------------------------------------------------------------------------------------------- */
 @media (max-width:760px){
@@ -679,7 +689,17 @@ body.ready #rail{opacity:1}
 
 </main>
 
-<div id="loader" role="status" aria-live="polite"><div class="loader-brand"><svg  viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="16.5" stroke="currentColor" stroke-width="1"/><path d="M8.8 25.8a12 12 0 0 1 0-15.6M27.2 10.2a12 12 0 0 1 0 15.6" stroke="currentColor" stroke-width=".65" opacity=".5"/><path d="M13 27V9h6a5 5 0 0 1 0 10h-6m6 0 5 8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>RONDEL</span></div><div class="loader-track" aria-hidden="true"><i id="loaderBar"></i></div><p id="loaderText">Loading</p></div>
+<div id="loader" role="status" aria-live="polite" aria-label="Loading Rondel One">
+  <div class="ld-assembly" aria-hidden="true">
+    <div class="ld-record"><div class="ld-label"><img src="https://madebysourasith-sudo.github.io/rondel-one-turntable/assets/asset-14.jpg" alt="" decoding="async" fetchpriority="high" width="256" height="256"></div></div>
+    <div class="ld-sheen"></div><i class="ld-spindle"></i>
+  </div>
+  <div class="ld-copy">
+    <div class="ld-meta" aria-hidden="true"><span>33⅓ RPM</span><span id="loaderPercent">00%</span><span>SIDE A</span></div>
+    <p class="ld-title">RONDEL ONE</p>
+    <p id="loaderText">Cueing the record</p>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1502,7 +1522,7 @@ window.addEventListener('keydown', e => {
 let progress = 0;
 function showProgress(f) {
   progress = Math.max(progress, clamp(f, 0, 1));
-  dom.loader.style.setProperty("--load", progress);
+  $("#loaderPercent").textContent = String(Math.round(progress * 100)).padStart(2, "0") + "%";
 }
 let fallbackLoop = null;
 function ready() {
@@ -1510,6 +1530,7 @@ function ready() {
   measure();
   document.fonts.ready.then(() => { measure(); if (window.TT) window.TT.render(); });
   intro.t0 = performance.now(); intro.k = reduced ? 1 : 0; intro.done = reduced;
+  if (!dom.loader.classList.contains("error")) dom.loaderText.textContent = "Ready to play";
   body.classList.add('ready');
   const finish = () => { dom.loader.classList.add('hide'); if (window.TT) window.TT.render(); };
   if (lenis) lenis.start();
@@ -1534,7 +1555,7 @@ window.SITE = {
     if (!fallbackLoop) { let last = performance.now(); const loop = now => { fallbackLoop = requestAnimationFrame(loop); frame(Math.min(0.05, (now - last) / 1000), now); last = now; }; fallbackLoop = requestAnimationFrame(loop); }
   }
 };
-// if the module never reports (blocked CDN, no WebGL), fall back after 12 s so the page is still usable
+// if the module never reports (blocked CDN, no WebGL), fall back after 30 s so the page is still usable
 const bootWatchdog = setTimeout(() => { if (!bootReady) window.SITE.onError(new Error('timed out')); }, 30000);
 let measureRaf = 0;
 window.addEventListener('resize', () => { cancelAnimationFrame(measureRaf); measureRaf = requestAnimationFrame(() => { measure(); if (window.TT) window.TT.render(); }); }, { passive: true });
