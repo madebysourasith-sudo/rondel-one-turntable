@@ -65,7 +65,7 @@ sup{line-height:0}
 .l.nowrap>span{white-space:nowrap}
 
 /* ---- fixed layers -------------------------------------------------------------------------------------------- */
-#ambientBackground{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden}
+#ambientBackground{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden;opacity:var(--ambient-opacity,.7);transition:opacity .8s ease}
 body.ambient-on #ambientBackground{visibility:visible}
 #webgl-halftone{display:block;width:100%;height:100%}
 #ground,#pool,#grain{display:none}
@@ -792,7 +792,7 @@ const initHalftoneWebGL = () => {
     const clock = new THREE.Clock();
     const animate = () => {
         requestAnimationFrame(animate);
-        material.uniforms.time.value = clock.getElapsedTime();
+        material.uniforms.time.value = clock.getElapsedTime() * .65;
         renderer.render(scene, camera);
     };
     animate();
@@ -841,7 +841,7 @@ const byId = {}; for (const s of sections) byId[s.id] = s;
 for (const s of sections) if (s.el.classList.contains('ch')) s.el.style.setProperty('--len', s.len);
 
 const dom = {
-  sceneLayer: $('#stage'), ground: $('#ground'), fade: $('#fade'), outHead: $('.out-head'), outFinish: $('#outFinish'), pool: $('#pool'), cue: $('#cue'), heroSound: $('#heroSound'), nav: $('#nav'), navLinks: $$('#nav [data-act]'), scrim: $('#scrim'),
+  ambient: $('#ambientBackground'), sceneLayer: $('#stage'), ground: $('#ground'), fade: $('#fade'), outHead: $('.out-head'), outFinish: $('#outFinish'), pool: $('#pool'), cue: $('#cue'), heroSound: $('#heroSound'), nav: $('#nav'), navLinks: $$('#nav [data-act]'), scrim: $('#scrim'),
   railDot: $('#railDot'), railAct: $('#railAct'), railNum: $('#railNum'), barFill: $('#barFill'),
   uwHero: $('#uwHero'), uwSlide: $('#uwSlide'), uwModels: $('#uwModels'),
   filmHead1: $('#filmHead1'), filmHead2: $('#filmHead2'), filmCap: $('#filmCap'), filmCapNum: $('#filmCapNum'), filmCapTxt: $('#filmCapTxt'), filmCapX: $('#filmCapX'), filmSound: $('#filmSound'),
@@ -1553,6 +1553,8 @@ function frame(dt, now) {
   { const o = byId.outro, f = o.top - y > 0 ? 0 : sm(0.68, 0.94, o.p); if (Math.abs(f - (frame.fade ?? -1)) > 0.001) { frame.fade = f; setv(dom.fade, '--fade', f); } }
   // Fade the product layer as the range enters; the halftone remains behind every chapter.
   setv(dom.sceneLayer, 'opacity', 1 - Math.max(opaqueCoverage, frame.fade || 0));
+  const textChapter = center && ['film','records','outro','foot'].includes(center.id);
+  setv(dom.ambient, '--ambient-opacity', textChapter ? .52 : .7);
   // the nav scrim: off in the hero, in once the hero starts to leave
   { const sc = sm(0.3, 0.75, byId.hero.p); if (Math.abs(sc - lastScrim) > 0.002) { setv(dom.scrim, '--scrim', sc); lastScrim = sc; } }
   for (const id in UNDER) { const u = UNDER[id]; if (!usedUnder.has(u) && u.style.getPropertyValue('--uo') !== '0') setv(u, '--uo', 0); }
